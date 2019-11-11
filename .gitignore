@@ -47,5 +47,5 @@ target/
 .cache-main
 .scala_dependencies
 .worksheet
-*.properties
+pom.properties
 *.jar
