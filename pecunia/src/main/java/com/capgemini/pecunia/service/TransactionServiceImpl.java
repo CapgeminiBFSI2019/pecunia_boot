@@ -1,12 +1,15 @@
 package com.capgemini.pecunia.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.capgemini.pecunia.dao.TransactionDAO;
+import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
@@ -187,9 +190,77 @@ public class TransactionServiceImpl implements TransactionService{
 
 	@Override
 	public int debitUsingCheque(Transaction transaction, Cheque cheque) throws TransactionException, PecuniaException {
-		// TODO Auto-generated method stub
-		return 0;
+	
+		int transId = 0;
+		int chequeId = 0;
+		try {
+
+			String accId = transaction.getAccountId();
+			double amount = transaction.getAmount();
+			LocalDateTime transDate = LocalDateTime.now();
+			LocalDate chequeissueDate = cheque.getIssueDate();
+			//Account account = new Account();
+			Account requestedAccount = new Account();
+			//account.setId(accId);
+			requestedAccount = transactionDAO.getAccountById(accId);
+
+			double oldBalance = getBalance(requestedAccount);
+			double newBalance = 0.0;
+			long period = ChronoUnit.DAYS.between(chequeissueDate, transDate);
+			if (requestedAccount.getStatus().equals("Active")) {
+				if (period <= 90 && amount <= Constants.MAXIMUM_CHEQUE_AMOUNT
+						&& amount >= Constants.MINIMUM_CHEQUE_AMOUNT) {
+					if (oldBalance > amount) {
+						newBalance = oldBalance - amount;
+						requestedAccount.setBalance(newBalance);
+						transactionDAO.updateBalance(requestedAccount);
+						cheque.setStatus(Constants.CHEQUE_STATUS_CLEARED);
+						cheque.setBankName(Constants.BANK_NAME);
+						chequeId = transactionDAO.generateChequeId(cheque);
+						Transaction debitTransaction = new Transaction();
+						debitTransaction.setAccountId(accId);
+						debitTransaction.setAmount(amount);
+						debitTransaction.setChequeId(chequeId);
+						debitTransaction.setOption(Constants.TRANSACTION_OPTION_CHEQUE);
+						debitTransaction.setType(Constants.TRANSACTION_DEBIT);
+						debitTransaction.setTransDate(transDate);
+						debitTransaction.setTransTo(Constants.SELF_CHEQUE);
+						debitTransaction.setTransFrom(Constants.NA);
+						debitTransaction.setClosingBalance(newBalance);
+						transId = transactionDAO.generateTransactionId(debitTransaction);
+
+					} else {
+
+						//logger.error(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
+						throw new TransactionException(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
+					}
+				} else {
+
+					//logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+					throw new TransactionException(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+				}
+			} else {
+				//logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
+			}
+
+		} catch (PecuniaException e) {
+			//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			throw new PecuniaException(e.getMessage());
+		} catch (TransactionException e) {
+
+			//logger.error(e.getMessage());
+			throw new TransactionException(e.getMessage());
+
+		} catch (Exception e) {
+
+			//logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+		}
+		//logger.info(Constants.AMOUNT_DEBITED + transId);
+		return transId;
 	}
+	
 
 	
 
