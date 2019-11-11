@@ -56,3 +56,4 @@ local.properties
 .worksheet
 pecunia/target/classes/META-INF/maven/com.capgemini/pecunia/pom.properties
 pecunia/target/pecunia-0.0.1-SNAPSHOT.jar
+pecunia/target/pecunia-0.0.1-SNAPSHOT.jar.original
