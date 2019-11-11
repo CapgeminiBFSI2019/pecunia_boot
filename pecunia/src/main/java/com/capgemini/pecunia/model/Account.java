@@ -110,5 +110,7 @@ public class Account {
 	public void setLastUpdated(LocalDateTime lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
+	
+	
 
 }
