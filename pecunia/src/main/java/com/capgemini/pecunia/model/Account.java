@@ -46,6 +46,8 @@ public class Account {
 		this.interest = interest;
 		this.lastUpdated = lastUpdated;
 	}
+	
+	
 
 	public String getAccountId() {
 		return accountId;
@@ -110,7 +112,7 @@ public class Account {
 	public void setLastUpdated(LocalDateTime lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
-	
+
 	
 
 }
