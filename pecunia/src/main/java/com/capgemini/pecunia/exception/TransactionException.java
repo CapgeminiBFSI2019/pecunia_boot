@@ -1,7 +1,8 @@
 package com.capgemini.pecunia.exception;
+public class TransactionException extends Exception {
 
-public class TransactionException extends Exception{
 	public TransactionException(String message) {
 		super(message);
 	}
+
 }
