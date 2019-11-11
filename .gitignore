@@ -48,3 +48,4 @@ target/
 .scala_dependencies
 .worksheet
 *.properties
+*.jar
