@@ -3,14 +3,18 @@ package com.capgemini.pecunia.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.capgemini.pecunia.dao.LoanRequestDAO;
 import com.capgemini.pecunia.dao.LoanRequestDAOImpl;
+import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanException;
+import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.LoanRequest;
 import com.capgemini.pecunia.repository.AccountRepository;
 
+@Component
 public class LoanRequestServiceImpl implements LoanRequestService{
 
 	@Autowired
@@ -44,12 +48,17 @@ public class LoanRequestServiceImpl implements LoanRequestService{
 			boolean isValidAccount = false;
 			int loanId = 0;
 		try { 
-			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
+			Optional<Account> accountRequested = accountRepository.findById(loan.getAccountId());
 			double balance = 0.0;
 			if(accountRequested.isPresent())
 			{
 				loan.setEmi(LoanRequestServiceImpl.calculateEMI(loan.getAmount(), loan.getTenure(), loan.getRoi()));
 				loanId = loanDAO.addLoanDetails(loan);
+			}
+			else
+			{
+				throw new PecuniaException(ErrorConstants.NO_SUCH_ACCOUNT) ;
+				
 			}
 			} catch (Exception e) {
 				//logger.error(e.getMessage());
