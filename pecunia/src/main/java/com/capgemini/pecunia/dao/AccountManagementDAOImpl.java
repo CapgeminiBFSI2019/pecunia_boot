@@ -3,24 +3,14 @@ package com.capgemini.pecunia.dao;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
-import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.Address;
-import com.capgemini.pecunia.model.Cheque;
 import com.capgemini.pecunia.model.Customer;
 import com.capgemini.pecunia.repository.AccountRepository;
 import com.capgemini.pecunia.repository.AddressRepository;
