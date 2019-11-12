@@ -20,6 +20,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
 import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.Address;
+import com.capgemini.pecunia.model.Cheque;
 import com.capgemini.pecunia.model.Customer;
 import com.capgemini.pecunia.repository.AccountRepository;
 import com.capgemini.pecunia.repository.AddressRepository;
@@ -154,14 +155,43 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	@Override
 	public String addCustomerDetails(com.capgemini.pecunia.model.Customer customer, Address address)
 			throws PecuniaException, AccountException, SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	
+		String addrId=null;
+		String custId=null;
+		
+		Address newAddress = new Address();
+		Customer newCustomer = new Customer();
+		newAddress.setAddressLine1(address.getAddressLine1());
+		newAddress.setAddressLine2(address.getAddressLine2());
+		newAddress.setCity(address.getCity());
+		newAddress.setState(address.getState());
+		newAddress.setCountry(address.getCountry());
+		newAddress.setZipcode(address.getZipcode());
+		newAddress = addressRepository.save(newAddress);
+		addrId= newAddress.getId();
+		newCustomer.setName(customer.getName());
+		newCustomer.setGender(customer.getGender());
+		newCustomer.setDob(customer.getDob());
+		newCustomer.setContact(customer.getContact());
+		newCustomer.setAadhar(customer.getAadhar());
+		newCustomer.setPan(customer.getPan());
+		newCustomer.setAddressId(customer.getAddressId());
+		newCustomer = customerRepository.save(newCustomer);
+		custId= newCustomer.getCustomerId();
+		return custId;
 	}
 
 	@Override
 	public String addAccount(com.capgemini.pecunia.model.Account account)
 			throws PecuniaException, AccountException, SQLException {
-		// TODO Auto-generated method stub
+		String accId=null;
+		Account newAccount = new Account();
+		newAccount.setCustomerId(account.getCustomerId());
+		newAccount.setBalance(account.getBalance());
+		newAccount.setBranchId(account.getBranchId());
+		newAccount.setInterest(account.getInterest());
+		newAccount.setType(account.getType());
+		newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
 		return null;
 	}
 
