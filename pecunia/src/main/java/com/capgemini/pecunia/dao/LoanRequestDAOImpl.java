@@ -31,7 +31,7 @@ public class LoanRequestDAOImpl implements LoanRequestDAO{
 			loanRequestEntity.setStatus(loan.getStatus());
 //			loanRequestEntity.setLoanId(loan.getLoanId());
 			loanRequestEntity=loanRequestRepository.save(loanRequestEntity);
-			loanId=loan.getLoanId();
+			loanId=loanRequestEntity.getLoanId();
 			 
 		}
 		
