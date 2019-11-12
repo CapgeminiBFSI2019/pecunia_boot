@@ -78,8 +78,8 @@ public class LoanDisbursalDAOImpl implements LoanDisbursalDAO {
 
 	@Override
 	public List<LoanDisbursal> loanApprovedList() throws IOException, PecuniaException, LoanDisbursalException {
-		List<LoanDisbursal> reqList = new ArrayList<>();
-		reqList = loanDisbursalRepository.findAll();
+		List<LoanDisbursal> reqList = loanDisbursalRepository.findAll();
+		System.out.println("idhar aaya");
 		if (reqList.size() > 0) {
 			return reqList;
 		} else {
