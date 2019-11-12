@@ -17,7 +17,7 @@ import com.capgemini.pecunia.model.LoanDisbursal;
 import com.capgemini.pecunia.util.Constants;
 
 @Component
-public class LoanDisbursalServiceImpl {
+public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 	TransactionDAOImpl transactionDAOImpl = new TransactionDAOImpl();
 	ArrayList<LoanDisbursal> approvedLoanList = new ArrayList<LoanDisbursal>();
 

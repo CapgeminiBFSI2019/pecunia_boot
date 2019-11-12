@@ -18,8 +18,6 @@ import com.google.gson.JsonObject;
 @RestController
 public class LoanDisbursalDataController {
 	@Autowired
-	LoanDisbursal loanDisbursal;
-	@Autowired
 	LoanDisbursalService loanDisbursalService;
 
 	@CrossOrigin(origins = "http://localhost:4200")  

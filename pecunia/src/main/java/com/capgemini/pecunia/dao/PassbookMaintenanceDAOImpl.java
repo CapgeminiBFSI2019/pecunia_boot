@@ -1,10 +1,12 @@
 package com.capgemini.pecunia.dao;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PassbookException;
@@ -13,8 +15,8 @@ import com.capgemini.pecunia.model.Transaction;
 import com.capgemini.pecunia.repository.PassbookRepository;
 
 
-
-public class PassbookMaintenanceDAOImpl {
+@Component
+public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 
 	@Autowired
 	PassbookRepository passbook;
@@ -37,6 +39,19 @@ public class PassbookMaintenanceDAOImpl {
             throw new PassbookException(ErrorConstants.UPDATE_PASSBOOK_ERROR);
         }
 	 return transList;
+	}
+
+	@Override
+	public boolean updateLastUpdated(String accountId) throws PecuniaException, PassbookException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Transaction> accountSummary(String accountId, LocalDate startDate, LocalDate endDate)
+			throws PassbookException, PecuniaException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

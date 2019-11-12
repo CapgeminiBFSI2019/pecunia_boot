@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 import com.capgemini.pecunia.model.Transaction;
 
 
-@Repository
+
 public interface PassbookRepository extends JpaRepository<Transaction, String>{
 
-	 @Query("select * from TransactionEntity where accountId= ?1 AND date BETWEEN (SELECT lastUpdated from AccountEntity where accountId= ?1) and ?2")
+	 @Query("select t from Transaction t where t.accountId= ?1 AND t.transDate BETWEEN (SELECT lastUpdated from Account where accountId= ?1) and ?2")
 	  List<Transaction> findById(String accountId, LocalDateTime currentDate);
 }

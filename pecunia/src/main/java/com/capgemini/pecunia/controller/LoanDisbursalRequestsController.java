@@ -23,10 +23,6 @@ import com.google.gson.JsonObject;
 @RestController
 public class LoanDisbursalRequestsController {
 	@Autowired
-	Loan loan;
-	@Autowired
-	LoanDisbursal loanDisbursal;
-	@Autowired
 	LoanDisbursalService loanDisbursalService;
 	
 	

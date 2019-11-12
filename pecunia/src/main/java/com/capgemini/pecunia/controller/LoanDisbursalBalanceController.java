@@ -23,12 +23,6 @@ import com.google.gson.JsonObject;
 @RestController
 public class LoanDisbursalBalanceController {
 	@Autowired
-	LoanDisbursal loanDisbursal;
-	@Autowired
-	Account account;
-	@Autowired
-	Loan loan;
-	@Autowired
 	LoanDisbursalService loanDisbursalService;
 	
 	@CrossOrigin(origins = "http://localhost:4200") 
@@ -36,8 +30,6 @@ public class LoanDisbursalBalanceController {
 	@GetMapping(path = "/loandisbursalbalanceupdation")
 	
 	public String updateBalance() throws IOException{
-	
-
 		ArrayList<Loan> retrieveAccepted = new ArrayList<Loan>();
 		try {
 		retrieveAccepted = loanDisbursalService.approveLoanWithoutStatus();
@@ -60,8 +52,8 @@ public class LoanDisbursalBalanceController {
 			ArrayList<String> msg = loanDisbursalService.updateExistingBalance(retrieveAccepted,
 					retrieveLoanDisbursedData);
 			if (msg.size() > 0) {
-				for (String loanDisbursal : msg) {
-					jsonArray.add(gson.toJson(loanDisbursal, String.class));
+				for (String jsonString : msg) {
+					jsonArray.add(gson.toJson(jsonString, String.class));
 				}
 				dataResponse.addProperty("success", true);
 				dataResponse.add("data", jsonArray);
