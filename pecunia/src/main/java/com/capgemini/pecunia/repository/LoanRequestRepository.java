@@ -22,7 +22,7 @@ public interface LoanRequestRepository extends JpaRepository<Loan, Integer>{
 	@Query("UPDATE Loan l SET l.status = ?1 WHERE loanId = ?2")
 	public Loan updateStatusOfRequest(String status, Integer loanId);
 	
-	@Query(value = "SELECT SUM(emi) FROM loan WHERE accountId = ?1")
+	@Query(value = "SELECT SUM(emi) FROM Loan WHERE accountId = ?1")
 	public double sumOfEmi(String accountId);
 	
 	

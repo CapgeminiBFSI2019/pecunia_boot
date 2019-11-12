@@ -3,10 +3,14 @@ package com.capgemini.pecunia.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Transaction;
 
+@Service
 public interface PassbookMaintenanceService {
 	
 
