@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanException;
 import com.capgemini.pecunia.exception.PecuniaException;
+import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanRequest;
 import com.capgemini.pecunia.repository.LoanRequestRepository;
 
@@ -20,7 +21,7 @@ public class LoanRequestDAOImpl implements LoanRequestDAO{
 	public int addLoanDetails(LoanRequest loan) throws PecuniaException, LoanException {
 		int loanId=0;
 		try {
-			LoanRequest loanRequestEntity=new LoanRequest();
+			Loan loanRequestEntity=new Loan();
 			loanRequestEntity.setAccountId(loan.getAccountId());
 			loanRequestEntity.setAmount(loan.getAmount());
 			loanRequestEntity.setCreditScore(loan.getCreditScore());

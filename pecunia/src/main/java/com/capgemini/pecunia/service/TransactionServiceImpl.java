@@ -197,15 +197,15 @@ public class TransactionServiceImpl implements TransactionService{
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 
 		}
-	//	logger.info(Constants.AMOUNT_CREDITED + transId);
+	//	logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : debitUsingCheque(Transaction transaction) - Input Parameters
+	 * - Function Name : creditUsingCheque(Transaction transaction,cheque cheque) - Input Parameters
 	 * : transaction object - Return Type : int - Throws :
-	 * TransactionException,PecuniaException - Author : Anish Basu - Creation Date
+	 * TransactionException,PecuniaException - Author : Rohan Patil - Creation Date
 	 * : 23/09/2019 - Description : debiting amount using Cheque of the specified
 	 * account
 	 ********************************************************************************************************/
@@ -333,6 +333,14 @@ public class TransactionServiceImpl implements TransactionService{
 //		logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 	}
+
+	/*******************************************************************************************************
+	 * - Function Name : debitUsingCheque(Transaction transaction,cheque cheque) - Input Parameters
+	 * : transaction object - Return Type : int - Throws :
+	 * TransactionException,PecuniaException - Author : Anish Basu- Creation Date
+	 * : 23/09/2019 - Description : debiting amount using Cheque of the specified
+	 * account
+	 ********************************************************************************************************/
 
 	@Override
 	public int debitUsingCheque(Transaction transaction, Cheque cheque) throws TransactionException, PecuniaException {
