@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.capgemini.pecunia.exception.LoanDisbursalException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanDisbursal;
 
+@Repository
 public interface LoanDisbursalDAO {
 	public List<Loan> retrieveLoanList() throws IOException, PecuniaException, LoanDisbursalException;
 	

@@ -1,6 +1,6 @@
 package com.capgemini.pecunia.repository;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,5 +14,5 @@ public interface LoanDisbursalRepository extends JpaRepository<LoanDisbursal, In
 	 public LoanDisbursal updateLoanDisbursal(double dueAmount, double numberOfEmiToBePaid, String accountId);
 	
 	@Query("SELECT DISTINCT accountId FROM LoanDisbursal")
-	List<String> uniqueAccIds();
+	ArrayList<String> uniqueAccIds();
 }

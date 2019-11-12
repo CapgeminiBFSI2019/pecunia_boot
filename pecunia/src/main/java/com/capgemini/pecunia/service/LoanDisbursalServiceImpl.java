@@ -3,6 +3,8 @@ package com.capgemini.pecunia.service;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Component;
+
 import com.capgemini.pecunia.dao.LoanDisbursalDAOImpl;
 import com.capgemini.pecunia.dao.TransactionDAOImpl;
 import com.capgemini.pecunia.exception.ErrorConstants;
@@ -14,7 +16,7 @@ import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanDisbursal;
 import com.capgemini.pecunia.util.Constants;
 
-
+@Component
 public class LoanDisbursalServiceImpl {
 	TransactionDAOImpl transactionDAOImpl = new TransactionDAOImpl();
 	ArrayList<LoanDisbursal> approvedLoanList = new ArrayList<LoanDisbursal>();
