@@ -21,6 +21,7 @@ public class TransactionController {
 	@Autowired
 	TransactionService transactionService;
 	
+	
 	/*******************************************************************************************************
 	 * - Function Name : creditUsingCheque(@RequestBody Map<String,
 	 * Object>)requestData) - Input Parameters : @RequestBody Map<String, Object>
@@ -63,6 +64,55 @@ public class TransactionController {
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("Transaction Id", transId);
 			dataResponse.addProperty("message", "Amount credited.Trans Id is \t" + transId);
+
+		} catch (TransactionException | PecuniaException e) {
+			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("message", e.getMessage());
+		}
+		return dataResponse.toString();
+	}
+	
+	
+	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/debitCheque")
+
+	/*******************************************************************************************************
+	 * - Function Name : debitUsingCheque(@RequestBody Map<String, Object>
+	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+	 * requestData - Return Type : String - Author : Anish Basu - Creation Date :
+	 * 02/11/2019 - Description : Debit Using Cheque
+	 ********************************************************************************************************/
+
+	public String debitUsingCheque(@RequestBody Map<String, Object> requestData) {
+		JsonObject dataResponse = new JsonObject();
+
+		String accountNumber = requestData.get("accountNumber").toString();
+		int debitChequeNumber = Integer.parseInt(requestData.get("debitChequeNumber").toString());
+		String holderName = requestData.get("holderName").toString();
+		double amount = Double.parseDouble(requestData.get("debitChequeAmount").toString());
+		LocalDate chequeIssueDate = LocalDate.parse(requestData.get("issueDate").toString());
+		String ifsc = requestData.get("ifsc").toString();
+
+		System.out.println(accountNumber + "\n" + debitChequeNumber + "\n" + holderName + "\n" + amount + "\n"
+				+ chequeIssueDate + "\n" + ifsc);
+		
+		Transaction debitChequeTransaction = new Transaction();
+		debitChequeTransaction.setAmount(amount);
+		debitChequeTransaction.setAccountId(accountNumber);
+		
+		Cheque debitCheque = new Cheque();
+		debitCheque.setAccountNo(accountNumber);
+		debitCheque.setHolderName(holderName);
+		debitCheque.setIfsc(ifsc);
+		debitCheque.setIssueDate(chequeIssueDate);
+		debitCheque.setNum(debitChequeNumber);
+
+		try {
+			int transId = transactionService.debitUsingCheque(debitChequeTransaction, debitCheque);
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("Transaction Id", transId);
+			dataResponse.addProperty("message", "Amount debited.Trans Id is \t" + transId);
 
 		} catch (TransactionException | PecuniaException e) {
 			dataResponse.addProperty("success", false);
