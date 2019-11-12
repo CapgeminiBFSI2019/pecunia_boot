@@ -68,21 +68,22 @@ public class TransactionServiceImpl implements TransactionService{
 			int transId = 0;
 			try {
 				String accId = transaction.getAccountId();
-
+				System.out.println("Service Account-id:" + accId);
 				double amount = transaction.getAmount();
 
 				LocalDateTime transDate = LocalDateTime.now();
 				Account account = new Account();
 				Account requestedAccount = new Account();
-//				account.setId(accId);
+				account.setAccountId(accId);
 			//	requestedAccount = accManagement.showAccountDetails(account);
 				
 				//Account account = new Account();
 				
 			
 				requestedAccount = transactionDAO.getAccountById(accId);
-
+				
 				double oldBalance = transactionDAO.getBalance(account);
+				//System.out.println("Yaha aya");
 				double newBalance = 0.0;
 
 				if (requestedAccount.getStatus().equals("Active")) {
@@ -92,7 +93,9 @@ public class TransactionServiceImpl implements TransactionService{
 
 							newBalance = oldBalance + amount;
 							account.setBalance(newBalance);
+							
 							transactionDAO.updateBalance(account);
+							
 							transaction.setClosingBalance(newBalance);
 							transaction.setType(Constants.TRANSACTION_CREDIT);
 							transaction.setOption(Constants.TRANSACTION_OPTION_SLIP);
@@ -133,12 +136,80 @@ public class TransactionServiceImpl implements TransactionService{
 			return transId;
 		}
 	
+	
 
-	@Override
+	/*******************************************************************************************************
+	 * - Function Name : debitUsingSlip(Transaction transaction) - Input Parameters
+	 * : transaction object - Return Type : int - Throws :
+	 * TransactionException,PecuniaException - Author : Anwesha Das - Creation Date
+	 * : 23/09/2019 - Description : debiting amount using slip of the specified
+	 * account
+	 ********************************************************************************************************/
+
 	public int debitUsingSlip(Transaction transaction) throws TransactionException, PecuniaException {
-		// TODO Auto-generated method stub
-		return 0;
+
+		int transId = 0;
+		try {
+			String accId = transaction.getAccountId();
+			double amount = transaction.getAmount();
+			LocalDateTime transDate = LocalDateTime.now();
+			Account account = new Account();
+			Account requestedAccount = new Account();
+			account.setAccountId(accId);
+			//requestedAccount = accManagement.showAccountDetails(account);
+			requestedAccount = transactionDAO.getAccountById(accId);
+			double oldBalance = transactionDAO.getBalance(account);
+
+			double newBalance = 0.0;
+			if (requestedAccount.getStatus().equals("Active")) {
+				if (oldBalance >= amount) {
+					newBalance = oldBalance - amount;
+					account.setBalance(newBalance);
+					transactionDAO.updateBalance(account);
+					Transaction debitTransaction = new Transaction();
+					debitTransaction.setAccountId(accId);
+					debitTransaction.setAmount(amount);
+					debitTransaction.setOption(Constants.TRANSACTION_OPTION_SLIP);
+					debitTransaction.setType(Constants.TRANSACTION_DEBIT);
+					debitTransaction.setTransDate(transDate);
+					debitTransaction.setClosingBalance(newBalance);
+					debitTransaction.setTransTo(Constants.NA);
+					debitTransaction.setTransFrom(Constants.NA);
+					transId = transactionDAO.generateTransactionId(debitTransaction);
+
+				} else {
+
+				//	logger.error(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
+					throw new TransactionException(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
+				}
+			} else {
+			//	logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
+			}
+		} catch (TransactionException e) {
+
+		//	logger.error(e.getMessage());
+			throw new TransactionException(e.getMessage());
+
+		} catch (Exception e) {
+
+		//	logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+
+		}
+	//	logger.info(Constants.AMOUNT_CREDITED + transId);
+		return transId;
+
 	}
+
+	/*******************************************************************************************************
+	 * - Function Name : debitUsingCheque(Transaction transaction) - Input Parameters
+	 * : transaction object - Return Type : int - Throws :
+	 * TransactionException,PecuniaException - Author : Anish Basu - Creation Date
+	 * : 23/09/2019 - Description : debiting amount using Cheque of the specified
+	 * account
+	 ********************************************************************************************************/
+
 
 	@Override
 	public int creditUsingCheque(Transaction transaction, Cheque cheque) throws TransactionException, PecuniaException {

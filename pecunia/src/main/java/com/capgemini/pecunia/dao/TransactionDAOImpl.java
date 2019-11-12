@@ -26,6 +26,7 @@ public class TransactionDAOImpl implements TransactionDAO{
 	
 	@Override
 	public double getBalance(Account account) throws PecuniaException, TransactionException {
+		System.out.println("getbalance mai :"+account.getAccountId());
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 		double balance = 0.0;
 		if(accountRequested.isPresent())
