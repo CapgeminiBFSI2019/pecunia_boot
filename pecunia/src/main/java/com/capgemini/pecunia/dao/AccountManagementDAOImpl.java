@@ -32,10 +32,10 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 
 	@Autowired
 	AccountRepository accountRepository;
-	
+
 	@Autowired
 	CustomerRepository customerRepository;
-	
+
 	@Autowired
 	AddressRepository addressRepository;
 
@@ -45,18 +45,16 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		String custId = null;
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
-			if(accountRequested.isPresent())
-			{
+			if (accountRequested.isPresent()) {
 				custId = accountRequested.get().getCustomerId();
 				Optional<Customer> customerRequested = customerRepository.findById(custId);
-				if(customerRequested.isPresent()) {
+				if (customerRequested.isPresent()) {
 					Customer newCustomer = customerRequested.get();
 					newCustomer.setName(customer.getName());
 					newCustomer = customerRepository.save(newCustomer);
 					isUpdated = true;
 				}
-			}
-			else {
+			} else {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
@@ -71,15 +69,12 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException {
 		boolean isDeleted = false;
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
-		if(accountRequested.isPresent())
-		{
+		if (accountRequested.isPresent()) {
 			Account newAccount = accountRequested.get();
 			newAccount.setStatus(Constants.ACCOUNT_STATUS[1]);
 			accountRepository.save(newAccount);
 			isDeleted = true;
-		}
-		else
-		{
+		} else {
 			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
 		return isDeleted;
@@ -91,18 +86,16 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		String custId = null;
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
-			if(accountRequested.isPresent())
-			{
+			if (accountRequested.isPresent()) {
 				custId = accountRequested.get().getCustomerId();
 				Optional<Customer> customerRequested = customerRepository.findById(custId);
-				if(customerRequested.isPresent()) {
+				if (customerRequested.isPresent()) {
 					Customer newCustomer = customerRequested.get();
 					newCustomer.setContact(customer.getContact());
 					newCustomer = customerRepository.save(newCustomer);
 					isUpdated = true;
 				}
-			}
-			else {
+			} else {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
@@ -114,21 +107,19 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	}
 
 	@Override
-	public boolean updateCustomerAddress(Account account, Address address)
-			throws PecuniaException, AccountException {
+	public boolean updateCustomerAddress(Account account, Address address) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
 		String custId = null;
 		String addrId = null;
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
-			if(accountRequested.isPresent())
-			{
+			if (accountRequested.isPresent()) {
 				custId = accountRequested.get().getCustomerId();
 				Optional<Customer> customerRequested = customerRepository.findById(custId);
-				if(customerRequested.isPresent()) {
+				if (customerRequested.isPresent()) {
 					addrId = customerRequested.get().getAddressId();
 					Optional<Address> addressRequested = addressRepository.findById(addrId);
-					if(addressRequested.isPresent()) {
+					if (addressRequested.isPresent()) {
 						Address newAddress = addressRequested.get();
 						newAddress.setAddressLine1(address.getAddressLine1());
 						newAddress.setAddressLine2(address.getAddressLine2());
@@ -140,8 +131,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 						isUpdated = true;
 					}
 				}
-			}
-			else {
+			} else {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
@@ -153,46 +143,55 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	}
 
 	@Override
-	public String addCustomerDetails(com.capgemini.pecunia.model.Customer customer, Address address)
+	public String addCustomerDetails(Customer customer, Address address)
 			throws PecuniaException, AccountException, SQLException {
-	
-		String addrId=null;
-		String custId=null;
-		
-		Address newAddress = new Address();
-		Customer newCustomer = new Customer();
-		newAddress.setAddressLine1(address.getAddressLine1());
-		newAddress.setAddressLine2(address.getAddressLine2());
-		newAddress.setCity(address.getCity());
-		newAddress.setState(address.getState());
-		newAddress.setCountry(address.getCountry());
-		newAddress.setZipcode(address.getZipcode());
-		newAddress = addressRepository.save(newAddress);
-		addrId= newAddress.getId();
-		newCustomer.setName(customer.getName());
-		newCustomer.setGender(customer.getGender());
-		newCustomer.setDob(customer.getDob());
-		newCustomer.setContact(customer.getContact());
-		newCustomer.setAadhar(customer.getAadhar());
-		newCustomer.setPan(customer.getPan());
-		newCustomer.setAddressId(customer.getAddressId());
-		newCustomer = customerRepository.save(newCustomer);
-		custId= newCustomer.getCustomerId();
-		return custId;
+
+		String addrId = null;
+		String custId = null;
+		try {
+			Address newAddress = new Address();
+			Customer newCustomer = new Customer();
+			newAddress.setAddressLine1(address.getAddressLine1());
+			newAddress.setAddressLine2(address.getAddressLine2());
+			newAddress.setCity(address.getCity());
+			newAddress.setState(address.getState());
+			newAddress.setCountry(address.getCountry());
+			newAddress.setZipcode(address.getZipcode());
+			newAddress = addressRepository.save(newAddress);
+			addrId = newAddress.getId();
+			newCustomer.setName(customer.getName());
+			newCustomer.setGender(customer.getGender());
+			newCustomer.setDob(customer.getDob());
+			newCustomer.setContact(customer.getContact());
+			newCustomer.setAadhar(customer.getAadhar());
+			newCustomer.setPan(customer.getPan());
+			newCustomer = customerRepository.save(newCustomer);
+			custId = newCustomer.getCustomerId();
+			return custId;
+		}
+
+		catch (Exception e) {
+
+			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
+		}
 	}
 
 	@Override
-	public String addAccount(com.capgemini.pecunia.model.Account account)
-			throws PecuniaException, AccountException, SQLException {
-		String accId=null;
-		Account newAccount = new Account();
-		newAccount.setCustomerId(account.getCustomerId());
-		newAccount.setBalance(account.getBalance());
-		newAccount.setBranchId(account.getBranchId());
-		newAccount.setInterest(account.getInterest());
-		newAccount.setType(account.getType());
-		newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
-		return null;
+	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
+		String accId = null;
+		try {
+			Account newAccount = new Account();
+			newAccount.setCustomerId(account.getCustomerId());
+			newAccount.setBalance(account.getBalance());
+			newAccount.setBranchId(account.getBranchId());
+			newAccount.setInterest(account.getInterest());
+			newAccount.setType(account.getType());
+			newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
+			return accId;
+		} catch (Exception e) {
+
+			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
+		}
 	}
 
 	@Override
