@@ -20,8 +20,7 @@ import com.google.gson.JsonObject;
 public class TransactionController {
 	@Autowired
 	TransactionService transactionService;
-	
-	
+
 	/*******************************************************************************************************
 	 * - Function Name : creditUsingCheque(@RequestBody Map<String,
 	 * Object>)requestData) - Input Parameters : @RequestBody Map<String, Object>
@@ -44,7 +43,7 @@ public class TransactionController {
 
 		System.out.println(payeeAccountNumber + "\n" + beneficiaryAccountNumber + "\n" + chequeNumber + "\n" + payeeName
 				+ "\n" + amount + "\n" + chequeIssueDate + "\n" + bankName + "\n" + ifsc);
-		
+
 		Transaction creditChequeTransaction = new Transaction();
 		creditChequeTransaction.setAmount(amount);
 		creditChequeTransaction.setAccountId(beneficiaryAccountNumber);
@@ -71,9 +70,7 @@ public class TransactionController {
 		}
 		return dataResponse.toString();
 	}
-	
-	
-	
+
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/debitCheque")
 
@@ -96,11 +93,11 @@ public class TransactionController {
 
 		System.out.println(accountNumber + "\n" + debitChequeNumber + "\n" + holderName + "\n" + amount + "\n"
 				+ chequeIssueDate + "\n" + ifsc);
-		
+
 		Transaction debitChequeTransaction = new Transaction();
 		debitChequeTransaction.setAmount(amount);
 		debitChequeTransaction.setAccountId(accountNumber);
-		
+
 		Cheque debitCheque = new Cheque();
 		debitCheque.setAccountNo(accountNumber);
 		debitCheque.setHolderName(holderName);
@@ -120,4 +117,36 @@ public class TransactionController {
 		}
 		return dataResponse.toString();
 	}
+
+	/*******************************************************************************************************
+	 * - Function Name : creditUsingSlip(@RequestBody Map<String, Object>
+	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
+	 * requestData - Return Type : String - Author : Arpan Mondal - Creation Date :
+	 * 02/11/2019 - Description : Credit Using Slip
+	 ********************************************************************************************************/
+
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/creditSlip")
+	public String creditUsingSlip(@RequestBody Map<String, Object> requestData) {
+		JsonObject dataResponse = new JsonObject();
+		String accountNumber = requestData.get("accountNumber").toString();
+		double amount = Double.parseDouble(requestData.get("creditSlipAmount").toString());
+		System.out.println(accountNumber + amount + "\n");
+		Transaction creditSlipTransaction = new Transaction();
+		creditSlipTransaction.setAmount(amount);
+		creditSlipTransaction.setAccountId(accountNumber);
+
+		try {
+			int transId = transactionService.creditUsingSlip(creditSlipTransaction);
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("Transaction Id", transId);
+			dataResponse.addProperty("message", "Amount credited.Trans Id is \t" + transId);
+
+		} catch (TransactionException | PecuniaException e) {
+			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("message", e.getMessage());
+		}
+		return dataResponse.toString();
+	}
+
 }
