@@ -18,7 +18,7 @@ public interface LoanDisbursalDAO {
 
 	public void releaseLoanSheet(ArrayList<Loan> loanList) throws IOException, PecuniaException;
 
-	public ArrayList<LoanDisbursal> loanApprovedList() throws IOException, PecuniaException, LoanDisbursalException;
+	public List<LoanDisbursal> loanApprovedList() throws IOException, PecuniaException, LoanDisbursalException;
 
 	public void updateLoanAccount(ArrayList<LoanDisbursal> loanApprovals, double dueAmount, double tenure,
 			String accountId, int loanDisbursalId) throws IOException, PecuniaException, LoanDisbursalException;
@@ -31,6 +31,8 @@ public interface LoanDisbursalDAO {
 	public List<Loan> retrieveAcceptedLoanListWithoutStatus() throws IOException, PecuniaException, LoanDisbursalException;
 	
 	public ArrayList<String> uniqueIds() throws IOException, PecuniaException, LoanDisbursalException;
+	
+
 	
 
 }
