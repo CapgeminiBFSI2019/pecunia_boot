@@ -27,21 +27,15 @@ public class AccountController {
 
 	@Autowired
 	AccountManagementService accManagementService;
-	@Autowired
-	Account account;
-	@Autowired
-	Account accountrequested;
-	@Autowired
-	Customer customer;
-	@Autowired
-	Address address;
 
-//
+	Account account = new Account();
+	Customer customer = new Customer();
+	Address address = new Address();
+
 	@CrossOrigin(origins = "http://localhost:4200")
-
 	@PostMapping(path = "/updateName")
 	public String updateCustomerName(@RequestBody Map<String, Object> requestData) {
-
+		
 		JsonObject dataResponse = new JsonObject();
 		String accountId = requestData.get("accountId").toString();
 		String custName = requestData.get("name").toString();
