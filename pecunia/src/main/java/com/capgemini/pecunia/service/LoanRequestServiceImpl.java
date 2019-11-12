@@ -19,6 +19,8 @@ public class LoanRequestServiceImpl implements LoanRequestService{
 
 	@Autowired
 	AccountRepository accountRepository;
+	@Autowired
+	LoanRequestDAO loanDAO;
 		//Logger logger = Logger.getRootLogger();
 
 		/*******************************************************************************************************
@@ -43,13 +45,9 @@ public class LoanRequestServiceImpl implements LoanRequestService{
 	 ********************************************************************************************************/
 
 		public int createLoanRequest(LoanRequest loan) throws LoanException {
-			Account account=new Account();
-			LoanRequestDAOImpl loanDAO=new LoanRequestDAOImpl();
-			boolean isValidAccount = false;
 			int loanId = 0;
 		try { 
 			Optional<Account> accountRequested = accountRepository.findById(loan.getAccountId());
-			double balance = 0.0;
 			if(accountRequested.isPresent())
 			{
 				loan.setEmi(LoanRequestServiceImpl.calculateEMI(loan.getAmount(), loan.getTenure(), loan.getRoi()));
