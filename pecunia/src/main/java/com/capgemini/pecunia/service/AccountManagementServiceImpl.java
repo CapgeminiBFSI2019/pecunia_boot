@@ -73,17 +73,17 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		boolean isUpdated = false;
 		try {
 
-			boolean isValidated = validateAccountId(account);
-			System.out.println(isValidated + "in service");
-			if (isValidated) {
-			
+//			boolean isValidated = validateAccountId(account);
+//			System.out.println(isValidated + "in service");
+//			if (isValidated) {
+//			
 
 				isUpdated = accountDAO.updateCustomerName(account, customer);
 				System.out.println("isUpdated: "+isUpdated);
-			} else {
-//				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
+//			} else {
+////				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+//				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+//			}
 
 		} catch (Exception e) {
 //			logger.error(ErrorConstants.UPDATE_ACCOUNT_ERROR);
