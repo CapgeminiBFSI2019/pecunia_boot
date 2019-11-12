@@ -185,21 +185,37 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	}
 
 	@Override
-	public String calculateAccountId(com.capgemini.pecunia.model.Account account)
-			throws PecuniaException, AccountException {
-		// TODO Auto-generated method stub
-		return null;
+	public String calculateAccountId(Account account) throws PecuniaException, AccountException {
+		long oldId = 0;
+		String oldIdstr = null;
+		String id = null;
+		try {
+			Optional<Account> accountRequested = accountRepository.findByAccountIdLike(account.getAccountId());
+			if(accountRequested.isPresent()) {
+				oldIdstr = accountRequested.get().getAccountId();
+			}
+			else {
+				oldIdstr = account.getAccountId()+ "00000";
+			}
+			oldId = Long.parseLong(oldIdstr);
+			id = Long.toString(oldId + 1);
+		}catch (Exception e) {
+//			logger.error(e.getMessage());
+			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
+		}
+//		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
+		return id;
 	}
 
 	@Override
-	public boolean validateAccountId(com.capgemini.pecunia.model.Account account)
+	public boolean validateAccountId(Account account)
 			throws PecuniaException, AccountException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public com.capgemini.pecunia.model.Account showAccountDetails(com.capgemini.pecunia.model.Account account)
+	public Account showAccountDetails(Account account)
 			throws AccountException, PecuniaException {
 		// TODO Auto-generated method stub
 		return null;

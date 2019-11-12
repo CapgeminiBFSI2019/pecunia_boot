@@ -25,16 +25,9 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 		List<Transaction> transList = new ArrayList<>();
 		
 		try {
-//			Session session = HibernateUtil.getSessionFactory().openSession();
-//			String hql = "from TransactionEntity where accountId= :accountId AND date BETWEEN (SELECT lastUpdated from AccountEntity where accountId= :accountId) and :currentDate";
-//			Query<TransactionEntity> query = session.createQuery(hql);
+
 			transList= passbook.findById(accountId, LocalDateTime.now().plusMinutes(330));
-//			query.setParameter("accountId", accountId);
-//			query.setParameter("currentDate",java.sql.Timestamp.valueOf(LocalDateTime.now().plusMinutes(330)));
-//			List<TransactionEntity> results = (List<TransactionEntity>)query.list();
-//            transList = passbookDetails(results);            
-     
-		}
+         }
 		catch(Exception e) {
             throw new PassbookException(ErrorConstants.UPDATE_PASSBOOK_ERROR);
         }
@@ -43,8 +36,17 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 
 	@Override
 	public boolean updateLastUpdated(String accountId) throws PecuniaException, PassbookException {
-		// TODO Auto-generated method stub
-		return false;
+	
+		boolean isUpdated = false;
+		try {
+
+			isUpdated= passbook.findByTime( LocalDateTime.now().plusMinutes(330), accountId);
+         
+		}
+		catch(Exception e) {
+            throw new PassbookException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
+        }
+		return isUpdated;
 	}
 
 	@Override
