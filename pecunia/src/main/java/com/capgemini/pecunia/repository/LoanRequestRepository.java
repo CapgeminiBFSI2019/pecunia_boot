@@ -27,6 +27,4 @@ public interface LoanRequestRepository extends JpaRepository<Loan, Integer>{
 	
 	
 }
-//public static final String UPDATE_LOAN_STATUS = "UPDATE loan SET loan_status = ?  WHERE loan_id = ?"
 
-//value = "SELECT sum(quantity) FROM Product" SELECT SUM(emi) FROM loan WHERE account_id = ?

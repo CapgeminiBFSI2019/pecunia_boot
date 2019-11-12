@@ -16,14 +16,13 @@ import com.google.gson.JsonObject;
 @RestController
 public class LoanRequestController {
 	@Autowired
-	LoanRequest loan;
-	@Autowired
 	LoanRequestService loanService;
 
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/LoanRequest")
 	public String loanRequest(@RequestBody Map<String, Object> requestData) {
 	
+		LoanRequest loan = new LoanRequest();
 		JsonObject dataResponse = new JsonObject();
 
 		String accountId = requestData.get("accountId").toString();

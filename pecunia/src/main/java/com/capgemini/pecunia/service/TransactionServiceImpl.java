@@ -53,11 +53,86 @@ public class TransactionServiceImpl implements TransactionService{
 		}
 	}
 
+	
+		/*******************************************************************************************************
+		 * - Function Name : creditUsingSlip(Transaction transaction) - Input Parameters
+		 * : transaction object - Return Type : int - Throws :
+		 * TransactionException,PecuniaException - Author : Arpan Mondal - Creation Date
+		 * : 23/09/2019 - Description : crediting amount using slip of the specified
+		 * account
+		 ********************************************************************************************************/
+
 	@Override
 	public int creditUsingSlip(Transaction transaction) throws TransactionException, PecuniaException {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
+			int transId = 0;
+			try {
+				String accId = transaction.getAccountId();
+
+				double amount = transaction.getAmount();
+
+				LocalDateTime transDate = LocalDateTime.now();
+				Account account = new Account();
+				Account requestedAccount = new Account();
+//				account.setId(accId);
+			//	requestedAccount = accManagement.showAccountDetails(account);
+				
+				//Account account = new Account();
+				
+			
+				requestedAccount = transactionDAO.getAccountById(accId);
+
+				double oldBalance = transactionDAO.getBalance(account);
+				double newBalance = 0.0;
+
+				if (requestedAccount.getStatus().equals("Active")) {
+					if (amount >= Constants.MINIMUM_CREDIT_SLIP_AMOUNT) {
+
+						if (amount <= Constants.MAXIMUM_CREDIT_SLIP_AMOUNT) {
+
+							newBalance = oldBalance + amount;
+							account.setBalance(newBalance);
+							transactionDAO.updateBalance(account);
+							transaction.setClosingBalance(newBalance);
+							transaction.setType(Constants.TRANSACTION_CREDIT);
+							transaction.setOption(Constants.TRANSACTION_OPTION_SLIP);
+							transaction.setTransTo(Constants.NA);
+							transaction.setTransFrom(Constants.NA);
+							transaction.setTransDate(transDate);
+							transId = transactionDAO.generateTransactionId(transaction);
+
+						}
+
+						else {
+
+	//						logger.error(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
+							throw new TransactionException(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
+
+						}
+					} else {
+
+//						logger.error(ErrorConstants.AMOUNT_LESS_EXCEPTION);
+						throw new TransactionException(ErrorConstants.AMOUNT_LESS_EXCEPTION);
+					}
+				} else {
+//					logger.error(ErrorConstants.ACCOUNT_CLOSED);
+					throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
+				}
+			} catch (TransactionException e) {
+
+				throw new TransactionException(e.getMessage());
+			}
+
+			catch (Exception e) {
+
+//				logger.error(ErrorConstants.TRANSACTION_AMOUNT_ERROR);
+				throw new TransactionException(e.getMessage());
+
+			}
+//			logger.info(Constants.AMOUNT_CREDITED + transId);
+			return transId;
+		}
+	
 
 	@Override
 	public int debitUsingSlip(Transaction transaction) throws TransactionException, PecuniaException {
