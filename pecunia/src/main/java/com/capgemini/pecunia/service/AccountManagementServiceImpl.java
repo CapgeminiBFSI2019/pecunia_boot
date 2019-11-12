@@ -106,13 +106,13 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		boolean isUpdated = false;
 		try {
 
-			boolean isValidated = validateAccountId(account);
-			if (isValidated) {
+//			boolean isValidated = validateAccountId(account);
+//			if (isValidated) {
 				isUpdated = accountDAO.updateCustomerContact(account, customer);
-			} else {
-//				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
+//			} else {
+////				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+//				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+//			}
 		} catch (Exception e) {
 //			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
@@ -134,13 +134,13 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 		boolean isUpdated = false;
 		try {
-			boolean isValidated = validateAccountId(account);
-			if (isValidated) {
+//			boolean isValidated = validateAccountId(account);
+//			if (isValidated) {
 				isUpdated = accountDAO.updateCustomerAddress(account, address);
-			} else {
-//				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
+//			} else {
+////				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+//				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+//			}
 		} catch (Exception e) {
 //			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
