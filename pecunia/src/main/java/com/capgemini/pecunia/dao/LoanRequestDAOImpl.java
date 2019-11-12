@@ -11,10 +11,12 @@ import com.capgemini.pecunia.repository.LoanRequestRepository;
 
 
 @Component
-public class LoanRequestDAOImpl {
+public class LoanRequestDAOImpl implements LoanRequestDAO{
 
 	@Autowired
 	LoanRequestRepository loanRequestRepository ;
+	
+	@Override
 	public int addLoanDetails(LoanRequest loan) throws PecuniaException, LoanException {
 		int loanId=0;
 		try {
@@ -27,7 +29,7 @@ public class LoanRequestDAOImpl {
 			loanRequestEntity.setTenure(loan.getTenure());
 			loanRequestEntity.setType(loan.getType());
 			loanRequestEntity.setStatus(loan.getStatus());
-			loanRequestEntity.setLoanId(loan.getLoanId());
+//			loanRequestEntity.setLoanId(loan.getLoanId());
 			loanRequestEntity=loanRequestRepository.save(loanRequestEntity);
 			loanId=loan.getLoanId();
 			 
