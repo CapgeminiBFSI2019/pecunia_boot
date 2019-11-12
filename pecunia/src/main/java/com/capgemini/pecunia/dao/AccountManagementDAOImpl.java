@@ -155,10 +155,10 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			newCustomer.setContact(customer.getContact());
 			newCustomer.setAadhar(customer.getAadhar());
 			newCustomer.setPan(customer.getPan());
-			newCustomer.setAddressId(customer.getAddressId());
+			newCustomer.setAddressId(addrId);
 			newCustomer = customerRepository.save(newCustomer);
 			custId = newCustomer.getCustomerId();
-			
+
 		}
 
 		catch (Exception e) {
@@ -179,7 +179,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			newAccount.setInterest(account.getInterest());
 			newAccount.setType(account.getType());
 			newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
-			
+
 		} catch (Exception e) {
 
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
