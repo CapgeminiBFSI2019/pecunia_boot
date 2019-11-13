@@ -41,17 +41,8 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
 		try {
-
-			boolean isValidated = validateAccountId(account);
-			if (isValidated) {
-
-				
-
 				isUpdated = accountDAO.deleteAccount(account);
-			} else {
-//				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
+			
 		} catch (Exception e) {
 //			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
@@ -263,13 +254,9 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
 		Account accountRequested = new Account();
 		try {
-			boolean isValidated = validateAccountId(account);
-			if (isValidated) {
+			
 				accountRequested = accountDAO.showAccountDetails(account);
-			} else {
-//				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
+			
 
 			
 		} catch (AccountException | PecuniaException e) {
