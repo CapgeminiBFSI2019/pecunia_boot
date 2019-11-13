@@ -35,7 +35,7 @@ public class Login {
 		this.secretKey = secretKey;
 	}
 
-	public Login(String string) {
+	public Login() {
 
 	}
 

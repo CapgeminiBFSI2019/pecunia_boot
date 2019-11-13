@@ -21,7 +21,7 @@ public class LoginDAOImpl implements LoginDAO {
 	@Override
 	public String validateEmail(Login login) throws PecuniaException, LoginException {
 		String secretKey = null;
-		Optional<Login> loginRequested = loginRepository.findById(login.getSecretKey());
+		Optional<Login> loginRequested = loginRepository.findById(login.getUsername());
 
 //		org.hibernate.Transaction transaction = null;
 		

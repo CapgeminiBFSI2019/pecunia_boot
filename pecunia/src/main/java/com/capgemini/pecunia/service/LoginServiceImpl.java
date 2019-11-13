@@ -49,9 +49,10 @@ public class LoginServiceImpl implements LoginService {
 				throw new LoginException(ErrorConstants.LOGIN_ERROR);
 			}
 			String hashPassword = Utility.toHexString(arr);
-			Login loginNew = new Login(login.getUsername());
+//			Login loginNew = new Login();
+		
 			try {
-				password = loginDAO.fetchPassword(loginNew);
+				password = loginDAO.fetchPassword(login);
 				if (password.equals(hashPassword)) {
 					isValidated = true;
 //					logger.info(LoggerMessage.LOGIN_SUCCESSFUL);
