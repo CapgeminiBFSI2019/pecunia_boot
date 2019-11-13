@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.capgemini.pecunia.dao.LoanDisbursalDAO;
-import com.capgemini.pecunia.dao.LoanDisbursalDAOImpl;
 import com.capgemini.pecunia.dao.TransactionDAO;
-import com.capgemini.pecunia.dao.TransactionDAOImpl;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanDisbursalException;
 import com.capgemini.pecunia.exception.PecuniaException;

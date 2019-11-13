@@ -34,15 +34,28 @@ class AccountManagementServiceImplTest {
 		ams=null;
 	}
 	
-	
-    @Ignore
 	@Test
 	@DisplayName("Account successfully deleted")
 	@Rollback(true)
 	void testDeleteAccount() throws PecuniaException, AccountException {
 		Account account = new Account();
-		account.setAccountId("100101000002");
+		account.setAccountId("100101000007");
+		assertTrue(ams.deleteAccount(account));
 	}
+	
+	
+	@Test
+	@DisplayName("Account failed to delete")
+	@Rollback(true)
+	void testDeleteAccountFail() throws PecuniaException, AccountException {
+		Account account = new Account();
+		account.setAccountId("900909000009");
+		assertThrows(AccountException.class, () -> {
+			ams.deleteAccount(account);
+            });
+	}
+	
+	
 
 	@Test
 	@DisplayName("Customer name successfully updated")
@@ -56,6 +69,24 @@ class AccountManagementServiceImplTest {
 		assertTrue(ams.updateCustomerName(account, customer));
 		
 	}
+	
+	
+	@Test
+	@DisplayName("Customer name failed to update. Account already closed")
+	@Rollback(true)
+	void testUpdateCustomerNameClosed() throws PecuniaException, AccountException {
+		Account account = new Account();
+		Customer customer = new Customer();
+		account.setAccountId("100101000003");
+		customer.setName("Vidushi");
+		
+		assertThrows(AccountException.class, () -> {
+			ams.updateCustomerName(account, customer);
+            });
+		
+		
+	}
+	
 
 	@Test
 	@DisplayName("Customer name failed to update")
@@ -143,19 +174,10 @@ class AccountManagementServiceImplTest {
 
 
 	
+	
+	
 	@Test
-	@DisplayName("Account id does not exist")
-	@Rollback(true)
-	void testValidateAccountIdFail() throws PecuniaException, AccountException {
-		Account account = new Account();
-		account.setAccountId("300404900004");
-		assertFalse(ams.validateAccountId(account));
-		
-	}
-	
-	
 	@Ignore
-	@Test
 	@DisplayName("Account successfully created")
 	@Rollback(true)
 	void testAddAccount() throws PecuniaException, AccountException {
@@ -171,9 +193,9 @@ class AccountManagementServiceImplTest {
 		address.setZipcode("400076");
 
 		customer.setName("Avizek");
-		customer.setAadhar("985750033536");
-		customer.setPan("PMNIT8709I");
-		customer.setContact("8876320157");
+		customer.setAadhar("741333333541");
+		customer.setPan("PMNLT8706Q");
+		customer.setContact("8876320888");
 		customer.setGender("F");
 		LocalDate dob = LocalDate.parse("1995-10-16");
 		customer.setDob(dob);

@@ -3,11 +3,9 @@ package com.capgemini.pecunia.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.capgemini.pecunia.dao.PassbookMaintenanceDAO;
 import com.capgemini.pecunia.exception.ErrorConstants;
@@ -15,7 +13,6 @@ import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.Transaction;
-import com.capgemini.pecunia.util.LoggerMessage;
 
 @Component
 public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceService {
