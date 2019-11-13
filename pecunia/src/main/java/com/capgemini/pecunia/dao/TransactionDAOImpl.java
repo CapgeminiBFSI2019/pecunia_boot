@@ -42,19 +42,28 @@ public class TransactionDAOImpl implements TransactionDAO{
 
 	@Override
 	public boolean updateBalance(Account account) throws PecuniaException, TransactionException {
-		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 		boolean success = false;
-		if(accountRequested.isPresent())
+		try
 		{
-			Account accountEntity = accountRequested.get();
-			accountEntity.setBalance(account.getBalance());
-			accountRepository.save(accountEntity);
-			success = true;
+			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
+			
+			if(accountRequested.isPresent())
+			{
+				Account accountEntity = accountRequested.get();
+				accountEntity.setBalance(account.getBalance());
+				accountRepository.save(accountEntity);
+				success = true;
+			}
+			else
+			{
+				throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
+			}
 		}
-		else
-		{
-			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
+		catch (Exception e) {
+			System.out.println("idhar exception aya");
+			throw new TransactionException(e.getMessage());
 		}
+		
 		return success;
 	}
 
