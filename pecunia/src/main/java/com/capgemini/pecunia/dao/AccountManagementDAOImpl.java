@@ -64,9 +64,14 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		boolean isDeleted = false;
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 		if (accountRequested.isPresent()) {
+			if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+				throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
+			}
 			Account newAccount = accountRequested.get();
+			System.out.println("Before update status :" + newAccount.getStatus());
 			newAccount.setStatus(Constants.ACCOUNT_STATUS[1]);
-			accountRepository.save(newAccount);
+			newAccount=accountRepository.save(newAccount);
+			System.out.println("Updated status : "+newAccount.getStatus());
 			isDeleted = true;
 		} else {
 			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
@@ -243,7 +248,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	@Override
 	public Account showAccountDetails(Account account)
 			throws AccountException, PecuniaException {
-		// TODO Auto-generated method stub
+		System.out.println("Inside acc dao impl");
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());	
 		Account accountNew;
 		if(accountRequested.isPresent())
