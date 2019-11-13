@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Component;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.exception.PecuniaException;
+import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.Transaction;
+import com.capgemini.pecunia.repository.AccountRepository;
 import com.capgemini.pecunia.repository.PassbookRepository;
 
 
@@ -21,6 +24,10 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 	@Autowired
 	PassbookRepository passbook;
 	
+	@Autowired
+	AccountRepository accountRepository;
+	
+	@Override
 	public List<Transaction> updatePassbook(String accountId) throws PassbookException, PecuniaException {
 		List<Transaction> transList = new ArrayList<>();
 		
@@ -55,7 +62,15 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 
+	@Override
+	public boolean accountValidation(Account account) throws PecuniaException, PassbookException{
+		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
+		if(accountRequested.isPresent())
+		{
+			return true;
+		}
+		 return false;
+	}
 	
 }
