@@ -67,7 +67,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 		}
 		for (int index = 0; index < acceptedLoanRequests.size(); index++) {
 			int loanId = acceptedLoanRequests.get(index).getLoanId();
-			loanDisbursedDAO.updateStatus(acceptedLoanRequests, loanId, Constants.LOAN_REQUEST_STATUS[1]);
+			loanDisbursedDAO.updateStatus(loanId, Constants.LOAN_REQUEST_STATUS[1]);
 		}
 		loanDisbursedDAO.releaseLoanSheet(acceptedLoanRequests);
 	
@@ -139,7 +139,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 		}
 		for (int index = 0; index < rejectedLoanRequests.size(); index++) {
 			int loanId = rejectedLoanRequests.get(index).getLoanId();
-			loanDisbursedDAO.updateStatus(rejectedLoanRequests, loanId, Constants.LOAN_REQUEST_STATUS[2]);
+			loanDisbursedDAO.updateStatus(loanId, Constants.LOAN_REQUEST_STATUS[2]);
 		}
 		
 		return rejectedLoanRequests;
@@ -177,7 +177,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 
 				try {
 				
-					loanDisbursedDAO.updateLoanAccount(updateLoanApprovals, updatedDueAmount, updatedTenure, accountId,
+					loanDisbursedDAO.updateLoanAccount(updatedDueAmount, updatedTenure, accountId,
 							loanDisbursalId);
 			
 				} catch (Exception e) {
@@ -214,13 +214,13 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 			try {
 				for (int index = 0; index < rejectedLoanList.size(); index++) {
 					int loanId = rejectedLoanList.get(index).getLoanId();
-					loanDisbursedDAO.updateStatus(rejectedLoanList, loanId, Constants.LOAN_REQUEST_STATUS[2]);
+					loanDisbursedDAO.updateStatus( loanId, Constants.LOAN_REQUEST_STATUS[2]);
 
 				}
 
 				for (int index = 0; index < approvedLoanList.size(); index++) {
 					int loanId = approvedLoanList.get(index).getLoanId();
-					loanDisbursedDAO.updateStatus(approvedLoanList, loanId, Constants.LOAN_REQUEST_STATUS[1]);
+					loanDisbursedDAO.updateStatus( loanId, Constants.LOAN_REQUEST_STATUS[1]);
 
 				}
 

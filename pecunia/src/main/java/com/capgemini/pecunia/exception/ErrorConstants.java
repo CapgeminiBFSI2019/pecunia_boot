@@ -1,10 +1,11 @@
 package com.capgemini.pecunia.exception;
+
 public class ErrorConstants {
 
 	public static final String TECH_ERROR = "Technical problem occured.";
 
 	public static final String UPDATE_PASSBOOK_ERROR = "Passbook not updated. There is some technical error.";
-	
+
 	public static final String DB_CONNECTION_ERROR = "Error in closing database connection.";
 
 	public static final String UPDATE_ACCOUNT_ERROR = "Update unsuccessful.";
@@ -47,6 +48,6 @@ public class ErrorConstants {
 	public static final String TRANSACTION_AMOUNT_ERROR = "The transaction could not take place";
 	public static final String AMOUNT_EXCEEDS_EXCEPTION = "Maximum amount is 100000";
 	public static final String AMOUNT_LESS_EXCEPTION = "Minimum amount is 100";
-	public static final String FETCH_ACCOUNT_DETAILS= "Error in fetching account details";
-
+	public static final String FETCH_ACCOUNT_DETAILS = "Error in fetching account details";
+	public static final String INVALID_LOAN_ACCOUNT = "No such loan request exists";
 }
