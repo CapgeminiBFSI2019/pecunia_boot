@@ -40,7 +40,7 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 	
 	public List<Transaction> updatePassbook(String accountId) throws PecuniaException, PassbookException
 	{
-		System.out.println("inside service impl");
+		
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
  			Account account = new Account();
@@ -84,24 +84,23 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 		
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
-			Account account = new Account();
+ 			Account account = new Account();
 			account.setAccountId(accountId);
-//			boolean accountExist = accountManagementService.validateAccountId(account);
-//			if(!accountExist)
-//			{
-//				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-//				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
-//			}
-		
 			
-			transactionList = passbookDAO.accountSummary(accountId, startDate, endDate);
+      		boolean accountExist = passbookDAO.accountValidation(account);
+			if (!accountExist) {
+				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
+			}
+
+			transactionList = passbookDAO.accountSummary(accountId,startDate,endDate);
+//			System.out.println("here:"+transactionList);
 			
-			//logger.info(LoggerMessage.ACCOUNT_SUMMARY_SUCCESSFUL);
 			return transactionList;
 		} catch (Exception e) {
-			//logger.error(LoggerMessage.ACCOUNT_SUMMARY_ERROR);
+			//logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
 			throw new PassbookException(e.getMessage());
-
+			
+		}
 }
-	}
 }

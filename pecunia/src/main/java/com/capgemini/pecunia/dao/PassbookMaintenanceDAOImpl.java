@@ -60,8 +60,16 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 	@Override
 	public List<Transaction> accountSummary(String accountId, LocalDate startDate, LocalDate endDate)
 			throws PassbookException, PecuniaException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Transaction> transList = new ArrayList<>();
+		
+		try {
+
+			transList= passbook.getAccountSummary(accountId, startDate, endDate);
+         }
+		catch(Exception e) {
+            throw new PassbookException(ErrorConstants.TECH_ERROR);
+        }
+	 return transList;
 	}
 
 	@Override
