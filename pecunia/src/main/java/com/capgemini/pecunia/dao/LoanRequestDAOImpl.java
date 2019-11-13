@@ -1,5 +1,7 @@
 package com.capgemini.pecunia.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +11,13 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanRequest;
 import com.capgemini.pecunia.repository.LoanRequestRepository;
+import com.capgemini.pecunia.util.Constants;
 
 
 @Component
 public class LoanRequestDAOImpl implements LoanRequestDAO{
+
+	private static final Logger logger=LoggerFactory.getLogger(LoanDisbursalDAO.class);
 
 	@Autowired
 	LoanRequestRepository loanRequestRepository ;
@@ -33,11 +38,10 @@ public class LoanRequestDAOImpl implements LoanRequestDAO{
 //			loanRequestEntity.setLoanId(loan.getLoanId());
 			loanRequestEntity=loanRequestRepository.save(loanRequestEntity);
 			loanId=loanRequestEntity.getLoanId();
-			 
 		}
-		
 		catch (Exception e)
 		{
+			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.LOAN_ADD_ERROR);
 		}
 		//return loanId;

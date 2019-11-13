@@ -2,9 +2,13 @@ package com.capgemini.pecunia.service;
 
 import java.util.Optional;
 
+import org.apache.tomcat.util.bcel.classfile.Constant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.capgemini.pecunia.dao.LoanDisbursalDAO;
 import com.capgemini.pecunia.dao.LoanRequestDAO;
 import com.capgemini.pecunia.dao.LoanRequestDAOImpl;
 import com.capgemini.pecunia.exception.ErrorConstants;
@@ -13,9 +17,12 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.LoanRequest;
 import com.capgemini.pecunia.repository.AccountRepository;
+import com.capgemini.pecunia.util.Constants;
 
 @Component
 public class LoanRequestServiceImpl implements LoanRequestService{
+
+	private static final Logger logger=LoggerFactory.getLogger(LoanDisbursalDAO.class);
 
 	@Autowired
 	AccountRepository accountRepository;
@@ -58,8 +65,10 @@ public class LoanRequestServiceImpl implements LoanRequestService{
 				throw new PecuniaException(ErrorConstants.NO_SUCH_ACCOUNT) ;
 				
 			}
-			} catch (Exception e) {
-				//logger.error(e.getMessage());
+			logger.info(Constants.LOAN_REQUEST_SUCCESSFUL);
+			} 
+		catch (Exception e) {
+				logger.error(e.getMessage());
 				throw new LoanException(e.getMessage());
 
 			}
