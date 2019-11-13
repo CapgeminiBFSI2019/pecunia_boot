@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +21,7 @@ import com.capgemini.pecunia.util.Constants;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
-//	Logger logger = Logger.getRootLogger();
+	private static final Logger logger = LoggerFactory.getLogger(TransactionService.class);
 
 	@Autowired
 	TransactionDAO transactionDAO;
@@ -31,10 +33,10 @@ public class TransactionServiceImpl implements TransactionService {
 			balance = transactionDAO.getBalance(account);
 			return balance;
 		} catch (PecuniaException e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 		} catch (Exception e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.FETCH_ERROR);
 		}
 	}
@@ -47,7 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
 			return success;
 		} catch (Exception e) {
 
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
 	}
@@ -99,17 +101,17 @@ public class TransactionServiceImpl implements TransactionService {
 
 					else {
 
-						// logger.error(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
+						logger.error(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
 						throw new TransactionException(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
 
 					}
 				} else {
 
-//						logger.error(ErrorConstants.AMOUNT_LESS_EXCEPTION);
+					logger.error(ErrorConstants.AMOUNT_LESS_EXCEPTION);
 					throw new TransactionException(ErrorConstants.AMOUNT_LESS_EXCEPTION);
 				}
 			} else {
-//					logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
 				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			}
 		} catch (TransactionException e) {
@@ -119,11 +121,11 @@ public class TransactionServiceImpl implements TransactionService {
 
 		catch (Exception e) {
 
-//				logger.error(ErrorConstants.TRANSACTION_AMOUNT_ERROR);
+			logger.error(ErrorConstants.TRANSACTION_AMOUNT_ERROR);
 			throw new TransactionException(e.getMessage());
 
 		}
-//			logger.info(Constants.AMOUNT_CREDITED + transId);
+		logger.info(Constants.AMOUNT_CREDITED + transId);
 		return transId;
 	}
 
@@ -167,25 +169,25 @@ public class TransactionServiceImpl implements TransactionService {
 
 				} else {
 
-					// logger.error(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
+					logger.error(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
 					throw new TransactionException(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
 				}
 			} else {
-				// logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
 				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			}
 		} catch (TransactionException e) {
 
-			// logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 
 		} catch (Exception e) {
 
-			// logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 
 		}
-		// logger.info(Constants.AMOUNT_DEBITED + transId);
+		logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 
 	}
@@ -222,7 +224,7 @@ public class TransactionServiceImpl implements TransactionService {
 			Account requestedAccount = transactionDAO.getAccountById(accountId);
 
 			if (!requestedAccount.getStatus().equals("Active")) {
-//				logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
 				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			} else {
 
@@ -235,14 +237,14 @@ public class TransactionServiceImpl implements TransactionService {
 					if (!bankName.equals(Constants.BANK_NAME)) {
 						// invalid bank cheque
 
-//						logger.error(ErrorConstants.INVALID_BANK_EXCEPTION);
+						logger.error(ErrorConstants.INVALID_BANK_EXCEPTION);
 						throw new TransactionException(ErrorConstants.INVALID_BANK_EXCEPTION);
 					} else {
 						// pecunia cheque
 						String payeeAccountId = transaction.getTransFrom();
 						Account requestedPayeeAccount = transactionDAO.getAccountById(payeeAccountId);
 						if (!requestedPayeeAccount.getStatus().equals("Active")) {
-//							logger.error(ErrorConstants.ACCOUNT_CLOSED);
+							logger.error(ErrorConstants.ACCOUNT_CLOSED);
 							throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 						} else {
 
@@ -250,7 +252,7 @@ public class TransactionServiceImpl implements TransactionService {
 									|| transaction.getAmount() > Constants.MAXIMUM_CHEQUE_AMOUNT) {
 								// invalid cheque amount
 
-//								logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+								logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 								throw new TransactionException(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 							} else {
 
@@ -312,10 +314,10 @@ public class TransactionServiceImpl implements TransactionService {
 			}
 
 		} catch (Exception e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 		}
-//		logger.info(Constants.AMOUNT_DEBITED + transId);
+		logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 	}
 
@@ -368,33 +370,33 @@ public class TransactionServiceImpl implements TransactionService {
 
 					} else {
 
-						// logger.error(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
+						logger.error(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
 						throw new TransactionException(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
 					}
 				} else {
 
-					// logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+					logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 					throw new TransactionException(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 				}
 			} else {
-				// logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
 				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			}
 
 		} catch (PecuniaException e) {
-			// logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new PecuniaException(e.getMessage());
 		} catch (TransactionException e) {
 
-			// logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 
 		} catch (Exception e) {
 
-			// logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 		}
-		// logger.info(Constants.AMOUNT_DEBITED + transId);
+		logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 	}
 
