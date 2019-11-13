@@ -1,10 +1,11 @@
 package com.capgemini.pecunia.service;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 
+import org.junit.Ignore;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,50 +35,125 @@ class AccountManagementServiceImplTest {
 	}
 	
 	
-
+    @Ignore
 	@Test
 	@DisplayName("Account successfully deleted")
 	@Rollback(true)
 	void testDeleteAccount() throws PecuniaException, AccountException {
+		Account account = new Account();
+		account.setAccountId("100101000002");
+	}
+
+	@Test
+	@DisplayName("Customer name successfully updated")
+	@Rollback(true)
+	void testUpdateCustomerName() throws PecuniaException, AccountException {
+		Account account = new Account();
+		Customer customer = new Customer();
+		account.setAccountId("100101000001");
+		customer.setName("Vidushi");
 		
+		assertTrue(ams.updateCustomerName(account, customer));
+		
+	}
+
+	@Test
+	@DisplayName("Customer name failed to update")
+	@Rollback(true)
+	void testUpdateCustomerNameFail() throws PecuniaException, AccountException {
+		Account account = new Account();
+		Customer customer = new Customer();
+		account.setAccountId("800909000009");
+		customer.setName("Vidushi");
+		
+		assertThrows(AccountException.class, () -> {
+			ams.updateCustomerName(account, customer);
+            });
+        
+	}
+	
+	@Test
+	@DisplayName("Customer contact successfully updated")
+	@Rollback(true)
+	void testUpdateCustomerContact() throws PecuniaException, AccountException {
+		Account account = new Account();
+		Customer customer = new Customer();
+		account.setAccountId("100101000001");
+		customer.setContact("9852001301");
+		
+		assertTrue(ams.updateCustomerContact(account, customer));
+	}
+
+	
+	@Test
+	@DisplayName("Customer Contact failed to update")
+	@Rollback(true)
+	void testUpdateCustomerContactFail() throws PecuniaException, AccountException {
+		Account account = new Account();
+		Customer customer = new Customer();
+		account.setAccountId("800909000009");
+		customer.setContact("9852001301");
+		
+		assertThrows(AccountException.class, () -> {
+			ams.updateCustomerContact(account, customer);
+            });
+		
+	}
+	
+	
+	
+	@Test
+	@DisplayName("Customer address successfully updated")
+	@Rollback(true)
+	void testUpdateCustomerAddress() throws PecuniaException, AccountException {
+		Account account = new Account();
+		Address address = new Address();
+		account.setAccountId("100101000001");
+		address.setAddressLine1("jshbijws");
+		address.setAddressLine2("sgeds");
+		address.setCity("bangalore");
+		address.setState("Karnataka");
+		address.setCountry("India");
+		address.setZipcode("500076");
+		
+		assertTrue(ams.updateCustomerAddress(account, address));
+		
+	}
+
+	
+	@Test
+	@DisplayName("Customer address failed to update")
+	@Rollback(true)
+	void testUpdateCustomerAddressFail() throws PecuniaException, AccountException {
+		Account account = new Account();
+		Address address = new Address();
+		account.setAccountId("800909000009");
+		address.setAddressLine1("jshbijws");
+		address.setAddressLine2("sgeds");
+		address.setCity("bangalore");
+		address.setState("Karnataka");
+		address.setCountry("India");
+		address.setZipcode("500076");
+		
+		assertThrows(AccountException.class, () -> {
+			ams.updateCustomerAddress(account, address);
+            });
 	
 	}
 
+
+	
 	@Test
-	@DisplayName("")
+	@DisplayName("Account id does not exist")
 	@Rollback(true)
-	void testUpdateCustomerName() {
+	void testValidateAccountIdFail() throws PecuniaException, AccountException {
+		Account account = new Account();
+		account.setAccountId("300404900004");
+		assertFalse(ams.validateAccountId(account));
 		
 	}
-
-	@Test
-	@DisplayName("")
-	@Rollback(true)
-	void testUpdateCustomerContact() {
-		
-	}
-
-	@Test
-	@DisplayName("")
-	@Rollback(true)
-	void testUpdateCustomerAddress() {
-		
-	}
-
-	@Test
-	@DisplayName("")
-	@Rollback(true)
-	void testCalculateAccountId() {
-		
-	}
-
-	@Test
-	@DisplayName("")
-	@Rollback(true)
-	void testValidateAccountId() {
-		
-	}
-
+	
+	
 	@Test
 	@DisplayName("Account successfully created")
 	@Rollback(true)
@@ -94,10 +170,10 @@ class AccountManagementServiceImplTest {
 		address.setZipcode("400076");
 
 		customer.setName("Avizek");
-		customer.setAadhar("159162356569");
-		customer.setPan("GHJKL8765E");
-		customer.setContact("6832555559");
-		customer.setGender("M");
+		customer.setAadhar("985750033536");
+		customer.setPan("PMNIT8709I");
+		customer.setContact("8876320157");
+		customer.setGender("F");
 		LocalDate dob = LocalDate.parse("1995-10-16");
 		customer.setDob(dob);
 
@@ -110,17 +186,44 @@ class AccountManagementServiceImplTest {
 		assertNotNull(ams.addAccount(customer, address, account));
 		
 		
+	}
+
+
+	@Test
+	@DisplayName("Account failed to create")
+	@Rollback(true)
+	void testAddAccountFail() throws PecuniaException, AccountException {
 		
-		
+		Account account = new Account();
+		Customer customer = new Customer();
+		Address address = new Address();
+		address.setAddressLine1("jshbijws");
+		address.setAddressLine2("sgeds");
+		address.setCity("Mumbai");
+		address.setState("Maharashtra");
+		address.setCountry("India");
+		address.setZipcode("400076");
+
+		customer.setName("Avizek");
+		customer.setAadhar("9852000012367");
+		customer.setPan("PMNBL8705KD");
+		customer.setContact("876334904");
+		customer.setGender("M");
+		LocalDate dob = LocalDate.parse("1995-10-16");
+		customer.setDob(dob);
+
+		account.setType("FD");
+		account.setBalance(9000.00);
+		account.setBranchId("1002");
+		account.setInterest(6.76);
+		account.setStatus(Constants.ACCOUNT_STATUS[0]);
+
+		assertThrows(AccountException.class, () -> {
+			ams.addAccount(customer, address, account);
+            });
 		
 		
 	}
 
-	@Test
-	@DisplayName("")
-	@Rollback(true)
-	void testShowAccountDetails() {
-		
-	}
 
 }
