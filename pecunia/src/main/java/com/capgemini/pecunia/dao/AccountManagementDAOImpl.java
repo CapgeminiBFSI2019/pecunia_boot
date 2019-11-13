@@ -229,6 +229,17 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	public Account showAccountDetails(Account account)
 			throws AccountException, PecuniaException {
 		// TODO Auto-generated method stub
-		return null;
+		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());	
+		Account acc = null;
+		if(accountRequested.isPresent())
+		{
+			acc = accountRequested.get();
+		}
+		else
+		{
+			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+		}
+		
+		return acc;
 	}
 }
