@@ -12,7 +12,7 @@ import com.capgemini.pecunia.model.LoanDisbursal;
 public interface LoanDisbursalRepository extends JpaRepository<LoanDisbursal, Integer> {
 	@Modifying
 	@Query("UPDATE LoanDisbursal l SET l.dueAmount = ?1, l.numberOfEmiToBePaid = ?2 WHERE l.accountId = ?3")
-	 public LoanDisbursal updateLoanDisbursal(double dueAmount, double numberOfEmiToBePaid, String accountId);
+	 public void updateLoanDisbursal(double dueAmount, double numberOfEmiToBePaid, String accountId);
 	
 	@Query("SELECT DISTINCT accountId FROM LoanDisbursal")
 	ArrayList<String> uniqueAccIds();

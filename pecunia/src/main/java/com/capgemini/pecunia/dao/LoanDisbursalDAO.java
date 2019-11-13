@@ -23,10 +23,9 @@ public interface LoanDisbursalDAO {
 
 	public List<LoanDisbursal> loanApprovedList() throws IOException, PecuniaException, LoanDisbursalException;
 
-	public void updateLoanAccount(ArrayList<LoanDisbursal> loanApprovals, double dueAmount, double tenure,
-			String accountId, int loanDisbursalId) throws IOException, PecuniaException, LoanDisbursalException;
+	public void updateLoanAccount(double dueAmount, double tenure, String accountId, int loanDisbursalId) throws IOException, PecuniaException, LoanDisbursalException;
 
-	public void updateStatus(ArrayList<Loan> loanRequests, int loanID, String Status)
+	public void updateStatus( int loanID, String Status)
 			throws IOException, PecuniaException, LoanDisbursalException;
 
 	public double totalEmi(String accountId) throws PecuniaException, LoanDisbursalException;
