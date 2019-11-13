@@ -5,11 +5,12 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.capgemini.pecunia.dao.TransactionDAO;
-import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.exception.TransactionException;
@@ -19,12 +20,12 @@ import com.capgemini.pecunia.model.Transaction;
 import com.capgemini.pecunia.util.Constants;
 
 @Component
-public class TransactionServiceImpl implements TransactionService{
-//	Logger logger = Logger.getRootLogger();
-	
+public class TransactionServiceImpl implements TransactionService {
+	private static final Logger logger = LoggerFactory.getLogger(TransactionService.class);
+
 	@Autowired
 	TransactionDAO transactionDAO;
-	
+
 	@Override
 	public double getBalance(Account account) throws TransactionException, PecuniaException {
 		try {
@@ -32,10 +33,10 @@ public class TransactionServiceImpl implements TransactionService{
 			balance = transactionDAO.getBalance(account);
 			return balance;
 		} catch (PecuniaException e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 		} catch (Exception e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.FETCH_ERROR);
 		}
 	}
@@ -48,95 +49,85 @@ public class TransactionServiceImpl implements TransactionService{
 			return success;
 		} catch (Exception e) {
 
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
 	}
 
-	
-		/*******************************************************************************************************
-		 * - Function Name : creditUsingSlip(Transaction transaction) - Input Parameters
-		 * : transaction object - Return Type : int - Throws :
-		 * TransactionException,PecuniaException - Author : Arpan Mondal - Creation Date
-		 * : 23/09/2019 - Description : crediting amount using slip of the specified
-		 * account
-		 ********************************************************************************************************/
+	/*******************************************************************************************************
+	 * - Function Name : creditUsingSlip(Transaction transaction) - Input Parameters
+	 * : transaction object - Return Type : int - Throws :
+	 * TransactionException,PecuniaException - Author : Arpan Mondal - Creation Date
+	 * : 23/09/2019 - Description : crediting amount using slip of the specified
+	 * account
+	 ********************************************************************************************************/
 
 	@Override
 	public int creditUsingSlip(Transaction transaction) throws TransactionException, PecuniaException {
 
-			int transId = 0;
-			try {
-				String accId = transaction.getAccountId();
-				System.out.println("Service Account-id:" + accId);
-				double amount = transaction.getAmount();
+		int transId = 0;
+		try {
+			String accId = transaction.getAccountId();
+			double amount = transaction.getAmount();
 
-				LocalDateTime transDate = LocalDateTime.now();
-				Account account = new Account();
-				Account requestedAccount = new Account();
-				account.setAccountId(accId);
-			//	requestedAccount = accManagement.showAccountDetails(account);
-				
-				//Account account = new Account();
-				
-			
-				requestedAccount = transactionDAO.getAccountById(accId);
-				
-				double oldBalance = transactionDAO.getBalance(account);
-				//System.out.println("Yaha aya");
-				double newBalance = 0.0;
+			LocalDateTime transDate = LocalDateTime.now();
+			Account account = new Account();
+			Account requestedAccount = new Account();
+			account.setAccountId(accId);
+			requestedAccount = transactionDAO.getAccountById(accId);
 
-				if (requestedAccount.getStatus().equals("Active")) {
-					if (amount >= Constants.MINIMUM_CREDIT_SLIP_AMOUNT) {
+			double oldBalance = transactionDAO.getBalance(account);
+			double newBalance = 0.0;
 
-						if (amount <= Constants.MAXIMUM_CREDIT_SLIP_AMOUNT) {
+			if (requestedAccount.getStatus().equals("Active")) {
+				if (amount >= Constants.MINIMUM_CREDIT_SLIP_AMOUNT) {
 
-							newBalance = oldBalance + amount;
-							account.setBalance(newBalance);
-							
-							transactionDAO.updateBalance(account);
-							
-							transaction.setClosingBalance(newBalance);
-							transaction.setType(Constants.TRANSACTION_CREDIT);
-							transaction.setOption(Constants.TRANSACTION_OPTION_SLIP);
-							transaction.setTransTo(Constants.NA);
-							transaction.setTransFrom(Constants.NA);
-							transaction.setTransDate(transDate);
-							transId = transactionDAO.generateTransactionId(transaction);
+					if (amount <= Constants.MAXIMUM_CREDIT_SLIP_AMOUNT) {
 
-						}
+						newBalance = oldBalance + amount;
+						account.setBalance(newBalance);
 
-						else {
+						transactionDAO.updateBalance(account);
 
-	//						logger.error(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
-							throw new TransactionException(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
+						transaction.setClosingBalance(newBalance);
+						transaction.setType(Constants.TRANSACTION_CREDIT);
+						transaction.setOption(Constants.TRANSACTION_OPTION_SLIP);
+						transaction.setTransTo(Constants.NA);
+						transaction.setTransFrom(Constants.NA);
+						transaction.setTransDate(transDate);
+						transId = transactionDAO.generateTransactionId(transaction);
 
-						}
-					} else {
+					}
 
-//						logger.error(ErrorConstants.AMOUNT_LESS_EXCEPTION);
-						throw new TransactionException(ErrorConstants.AMOUNT_LESS_EXCEPTION);
+					else {
+
+						logger.error(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
+						throw new TransactionException(ErrorConstants.AMOUNT_EXCEEDS_EXCEPTION);
+
 					}
 				} else {
-//					logger.error(ErrorConstants.ACCOUNT_CLOSED);
-					throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
+
+					logger.error(ErrorConstants.AMOUNT_LESS_EXCEPTION);
+					throw new TransactionException(ErrorConstants.AMOUNT_LESS_EXCEPTION);
 				}
-			} catch (TransactionException e) {
-
-				throw new TransactionException(e.getMessage());
+			} else {
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			}
+		} catch (TransactionException e) {
 
-			catch (Exception e) {
-
-//				logger.error(ErrorConstants.TRANSACTION_AMOUNT_ERROR);
-				throw new TransactionException(e.getMessage());
-
-			}
-//			logger.info(Constants.AMOUNT_CREDITED + transId);
-			return transId;
+			throw new TransactionException(e.getMessage());
 		}
-	
-	
+
+		catch (Exception e) {
+
+			logger.error(ErrorConstants.TRANSACTION_AMOUNT_ERROR);
+			throw new TransactionException(e.getMessage());
+
+		}
+		logger.info(Constants.AMOUNT_CREDITED + transId);
+		return transId;
+	}
 
 	/*******************************************************************************************************
 	 * - Function Name : debitUsingSlip(Transaction transaction) - Input Parameters
@@ -156,7 +147,6 @@ public class TransactionServiceImpl implements TransactionService{
 			Account account = new Account();
 			Account requestedAccount = new Account();
 			account.setAccountId(accId);
-			//requestedAccount = accManagement.showAccountDetails(account);
 			requestedAccount = transactionDAO.getAccountById(accId);
 			double oldBalance = transactionDAO.getBalance(account);
 
@@ -179,37 +169,36 @@ public class TransactionServiceImpl implements TransactionService{
 
 				} else {
 
-				//	logger.error(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
+					logger.error(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
 					throw new TransactionException(ErrorConstants.INSUFFICIENT_BALANCE_EXCEPTION);
 				}
 			} else {
-			//	logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
 				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			}
 		} catch (TransactionException e) {
 
-		//	logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 
 		} catch (Exception e) {
 
-		//	logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 
 		}
-	//	logger.info(Constants.AMOUNT_DEBITED + transId);
+		logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : creditUsingCheque(Transaction transaction,cheque cheque) - Input Parameters
-	 * : transaction object - Return Type : int - Throws :
+	 * - Function Name : creditUsingCheque(Transaction transaction,cheque cheque) -
+	 * Input Parameters : transaction object - Return Type : int - Throws :
 	 * TransactionException,PecuniaException - Author : Rohan Patil - Creation Date
 	 * : 23/09/2019 - Description : debiting amount using Cheque of the specified
 	 * account
 	 ********************************************************************************************************/
-
 
 	@Override
 	public int creditUsingCheque(Transaction transaction, Cheque cheque) throws TransactionException, PecuniaException {
@@ -231,13 +220,11 @@ public class TransactionServiceImpl implements TransactionService{
 			chequeDetail.setIfsc(cheque.getIfsc());
 			chequeDetail.setIssueDate(cheque.getIssueDate());
 
-//			TransactionDAO transactionDAO = new TransactionDAOImpl();
-
 			String accountId = transaction.getAccountId();
 			Account requestedAccount = transactionDAO.getAccountById(accountId);
 
 			if (!requestedAccount.getStatus().equals("Active")) {
-//				logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
 				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			} else {
 
@@ -250,14 +237,14 @@ public class TransactionServiceImpl implements TransactionService{
 					if (!bankName.equals(Constants.BANK_NAME)) {
 						// invalid bank cheque
 
-//						logger.error(ErrorConstants.INVALID_BANK_EXCEPTION);
+						logger.error(ErrorConstants.INVALID_BANK_EXCEPTION);
 						throw new TransactionException(ErrorConstants.INVALID_BANK_EXCEPTION);
 					} else {
 						// pecunia cheque
 						String payeeAccountId = transaction.getTransFrom();
 						Account requestedPayeeAccount = transactionDAO.getAccountById(payeeAccountId);
 						if (!requestedPayeeAccount.getStatus().equals("Active")) {
-//							logger.error(ErrorConstants.ACCOUNT_CLOSED);
+							logger.error(ErrorConstants.ACCOUNT_CLOSED);
 							throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 						} else {
 
@@ -265,7 +252,7 @@ public class TransactionServiceImpl implements TransactionService{
 									|| transaction.getAmount() > Constants.MAXIMUM_CHEQUE_AMOUNT) {
 								// invalid cheque amount
 
-//								logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+								logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 								throw new TransactionException(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 							} else {
 
@@ -327,24 +314,24 @@ public class TransactionServiceImpl implements TransactionService{
 			}
 
 		} catch (Exception e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 		}
-//		logger.info(Constants.AMOUNT_DEBITED + transId);
+		logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : debitUsingCheque(Transaction transaction,cheque cheque) - Input Parameters
-	 * : transaction object - Return Type : int - Throws :
-	 * TransactionException,PecuniaException - Author : Anish Basu- Creation Date
-	 * : 23/09/2019 - Description : debiting amount using Cheque of the specified
+	 * - Function Name : debitUsingCheque(Transaction transaction,cheque cheque) -
+	 * Input Parameters : transaction object - Return Type : int - Throws :
+	 * TransactionException,PecuniaException - Author : Anish Basu- Creation Date :
+	 * 23/09/2019 - Description : debiting amount using Cheque of the specified
 	 * account
 	 ********************************************************************************************************/
 
 	@Override
 	public int debitUsingCheque(Transaction transaction, Cheque cheque) throws TransactionException, PecuniaException {
-	
+
 		int transId = 0;
 		int chequeId = 0;
 		try {
@@ -353,9 +340,7 @@ public class TransactionServiceImpl implements TransactionService{
 			double amount = transaction.getAmount();
 			LocalDateTime transDate = LocalDateTime.now();
 			LocalDate chequeissueDate = cheque.getIssueDate();
-			//Account account = new Account();
 			Account requestedAccount = new Account();
-			//account.setId(accId);
 			requestedAccount = transactionDAO.getAccountById(accId);
 
 			double oldBalance = getBalance(requestedAccount);
@@ -385,37 +370,34 @@ public class TransactionServiceImpl implements TransactionService{
 
 					} else {
 
-						//logger.error(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
+						logger.error(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
 						throw new TransactionException(ErrorConstants.CHEQUE_BOUNCE_EXCEPTION);
 					}
 				} else {
 
-					//logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
+					logger.error(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 					throw new TransactionException(ErrorConstants.INVALID_CHEQUE_EXCEPTION);
 				}
 			} else {
-				//logger.error(ErrorConstants.ACCOUNT_CLOSED);
+				logger.error(ErrorConstants.ACCOUNT_CLOSED);
 				throw new TransactionException(ErrorConstants.ACCOUNT_CLOSED);
 			}
 
 		} catch (PecuniaException e) {
-			//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new PecuniaException(e.getMessage());
 		} catch (TransactionException e) {
 
-			//logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 
 		} catch (Exception e) {
 
-			//logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
+			logger.error(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 			throw new TransactionException(ErrorConstants.EXCEPTION_DURING_TRANSACTION);
 		}
-		//logger.info(Constants.AMOUNT_DEBITED + transId);
+		logger.info(Constants.AMOUNT_DEBITED + transId);
 		return transId;
 	}
-	
-
-	
 
 }

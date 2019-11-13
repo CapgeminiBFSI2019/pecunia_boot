@@ -2,7 +2,8 @@ package com.capgemini.pecunia.service;
 
 import java.time.LocalDateTime;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import com.capgemini.pecunia.util.Constants;
 @Service
 public class AccountManagementServiceImpl implements AccountManagementService {
 
-//	Logger logger = Logger.getRootLogger();
+	private static final Logger logger = LoggerFactory.getLogger(AccountManagementServiceImpl.class);
 
 	public AccountManagementServiceImpl() {
 	}
@@ -27,7 +28,6 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	AccountManagementDAO accountDAO;
 	@Autowired
 	AccountManagementService accManagementService;
-	
 
 	/*******************************************************************************************************
 	 * - Function Name : deleteAccount(Account account) - Input Parameters : Account
@@ -41,22 +41,13 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
 		try {
+			isUpdated = accountDAO.deleteAccount(account);
 
-			boolean isValidated = validateAccountId(account);
-			if (isValidated) {
-
-				
-
-				isUpdated = accountDAO.deleteAccount(account);
-			} else {
-//				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
 		}
-//		logger.info(Constants.DELETE_ACCOUNT_SUCCESSFUL);
+		logger.info(Constants.DELETE_ACCOUNT_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -73,23 +64,12 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		boolean isUpdated = false;
 		try {
 
-//			boolean isValidated = validateAccountId(account);
-//			System.out.println(isValidated + "in service");
-//			if (isValidated) {
-//			
-
-				isUpdated = accountDAO.updateCustomerName(account, customer);
-				System.out.println("isUpdated: "+isUpdated);
-//			} else {
-////				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-//				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-//			}
-
+			isUpdated = accountDAO.updateCustomerName(account, customer);
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.UPDATE_ACCOUNT_ERROR);
+			logger.error(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 			throw new AccountException(e.getMessage());
 		}
-//		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
+		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -105,19 +85,12 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public boolean updateCustomerContact(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
 		try {
-
-//			boolean isValidated = validateAccountId(account);
-//			if (isValidated) {
-				isUpdated = accountDAO.updateCustomerContact(account, customer);
-//			} else {
-////				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-//				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-//			}
+			isUpdated = accountDAO.updateCustomerContact(account, customer);
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
 		}
-//		logger.info(Constants.UPDATE_CONTACT_SUCCESSFUL);
+		logger.info(Constants.UPDATE_CONTACT_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -134,18 +107,12 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 
 		boolean isUpdated = false;
 		try {
-//			boolean isValidated = validateAccountId(account);
-//			if (isValidated) {
-				isUpdated = accountDAO.updateCustomerAddress(account, address);
-//			} else {
-////				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-//				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-//			}
+			isUpdated = accountDAO.updateCustomerAddress(account, address);
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(e.getMessage());
 		}
-//		logger.info(Constants.UPDATE_ADDRESS_SUCCESSFUL);
+		logger.info(Constants.UPDATE_ADDRESS_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -178,41 +145,14 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 				break;
 			}
 			account.setAccountId(id);
-			System.out.println("id going into query: "+id);
 			id = accountDAO.calculateAccountId(account);
-//			logger.info(Constants.ACCOUNT_ID_CALCULATED);
+			logger.info(Constants.ACCOUNT_ID_CALCULATED);
 			return id;
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.TECH_ERROR);
+			logger.error(ErrorConstants.TECH_ERROR);
 			throw new AccountException(ErrorConstants.TECH_ERROR);
 		}
 
-	}
-
-	/*******************************************************************************************************
-	 * - Function Name : validateAccountId(Account account) - Input Parameters :
-	 * Account account - Return Type : double - Throws : AccountException - Author :
-	 * Aditi Singh - Creation Date : 24/09/2019 - Description : Validation of
-	 * Account ID
-	 * 
-	 * @throws PecuniaException
-	 ********************************************************************************************************/
-
-	public boolean validateAccountId(Account account) throws PecuniaException, AccountException {
-		boolean isValidated = false;
-		boolean doesExist = false;
-
-		try {
-			doesExist = accountDAO.validateAccountId(account);
-			if(doesExist) {
-				isValidated=true;
-			}
-		}catch (Exception e) {
-//			logger.error(ErrorConstants.ACCOUNT_CLOSED);
-			throw new AccountException(e.getMessage());
-		}
-//		logger.info(Constants.ACCOUNT_ID_VALIDATED);
-		return isValidated;
 	}
 
 	/*******************************************************************************************************
@@ -229,32 +169,27 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		try {
 			String custId = accountDAO.addCustomerDetails(customer, address);
 			account.setCustomerId(custId);
-			System.out.println("cust Id: "+custId);
 			String accountId = calculateAccountId(account);
-			System.out.println("accountId: "+ accountId);
 			account.setAccountId(accountId);
 			account.setLastUpdated(LocalDateTime.now());
 			String createdId = accountDAO.addAccount(account);
-			System.out.println("createdId: "+createdId);
-			System.out.println("Acc created");
 			if (createdId == null) {
-				System.out.println("created ID: null");
-//				logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
+				logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
 				throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 			}
-//			logger.info(Constants.ADD_ACCOUNT_SUCCESSFUL);
+			logger.info(Constants.ADD_ACCOUNT_SUCCESSFUL);
 			return accountId;
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
-
+			logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
 	}
-	
+
 	/*******************************************************************************************************
-	 * - Function Name : showAccountDetails(Account account) - Input Parameters : Account
-	 * account - Return Type : boolean - Throws : AccountException - Author : Rohit
-	 * Kumar - Creation Date : 24/09/2019 - Description : Showing Details of Account
+	 * - Function Name : showAccountDetails(Account account) - Input Parameters :
+	 * Account account - Return Type : boolean - Throws : AccountException - Author
+	 * : Rohit Kumar - Creation Date : 24/09/2019 - Description : Showing Details of
+	 * Account
 	 * 
 	 * @throws PecuniaException
 	 ********************************************************************************************************/
@@ -263,17 +198,9 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
 		Account accountRequested = new Account();
 		try {
-			boolean isValidated = validateAccountId(account);
-			if (isValidated) {
-				accountRequested = accountDAO.showAccountDetails(account);
-			} else {
-//				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
-
-			
+			accountRequested = accountDAO.showAccountDetails(account);
 		} catch (AccountException | PecuniaException e) {
-//			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
 		return accountRequested;

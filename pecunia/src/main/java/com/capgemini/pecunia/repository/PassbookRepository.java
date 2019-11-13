@@ -19,6 +19,6 @@ public interface PassbookRepository extends JpaRepository<Transaction, String>{
 	  List<Transaction> findById(String accountId, LocalDateTime currentDate);
 	 
 	 @Query("select t from Transaction t where t.accountId= ?1 AND t.transDate BETWEEN ?2 and ?3")
-	 List<Transaction> getAccountSummary(String accountId, LocalDate startDate, LocalDate endDate);
+	 List<Transaction> getAccountSummary(String accountId, LocalDateTime localDateTime, LocalDateTime localDateTime2);
 	 
 }

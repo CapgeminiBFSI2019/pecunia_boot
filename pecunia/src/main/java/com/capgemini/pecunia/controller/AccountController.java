@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 @RestController
-public class AccountController {
+public class AccountController {	
 
 	@Autowired
 	AccountManagementService accManagementService;
@@ -35,7 +35,7 @@ public class AccountController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/updateName")
 	public String updateCustomerName(@RequestBody Map<String, Object> requestData) {
-		
+
 		JsonObject dataResponse = new JsonObject();
 		String accountId = requestData.get("accountId").toString();
 		String custName = requestData.get("name").toString();
@@ -179,7 +179,6 @@ public class AccountController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/deleteAccount")
 	public String deleteAccount(@RequestBody Map<String, Object> requestData) {
-
 		JsonObject dataResponse = new JsonObject();
 
 		String accountId = requestData.get("accountId").toString();
@@ -202,7 +201,6 @@ public class AccountController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(path = "/accountDetail/{id}")
 	public String showAccountDetails(@PathVariable("id") String id) {
-
 		Gson gson = new Gson();
 		JsonObject dataResponse = new JsonObject();
 		String accountId = id;
