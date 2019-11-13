@@ -28,7 +28,7 @@ public class LoginController {
 		
 	
 		public String validateEmail(@RequestBody Map<String, Object> requestData) {
-			Login login = new Login(null);
+			Login login = new Login();
 			JsonObject dataResponse = new JsonObject();
 
 			String username = requestData.get("username").toString();
