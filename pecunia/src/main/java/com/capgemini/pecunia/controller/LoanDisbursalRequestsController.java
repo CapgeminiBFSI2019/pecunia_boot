@@ -27,7 +27,6 @@ public class LoanDisbursalRequestsController {
 	
 	
 	@CrossOrigin(origins = "http://localhost:4200")  
-	@RequestMapping(value = "/loandisbursal/{menuOption}", method = RequestMethod.GET)
 	@GetMapping(value = "/loandisbursal/{menuOption}")
 	@ResponseBody
 	public String loanRequests(
