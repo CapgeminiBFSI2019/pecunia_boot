@@ -22,8 +22,6 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 	
 	@Autowired
 	PassbookMaintenanceDAO passbookDAO;
-	@Autowired
-	AccountManagementService accountManagementService;
 	
 	
 //	Logger logger = Logger.getRootLogger();
@@ -42,22 +40,24 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 	
 	public List<Transaction> updatePassbook(String accountId) throws PecuniaException, PassbookException
 	{
+		
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
  			Account account = new Account();
 			account.setAccountId(accountId);
-//			boolean accountExist = accountManagementService.validateAccountId(account);
-//			if (!accountExist) {
-//				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-//				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
-//			}
+      		boolean accountExist = passbookDAO.accountValidation(account);
+			if (!accountExist) {
+				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
+			}
 
 			transactionList = passbookDAO.updatePassbook(accountId);
-			System.out.println(transactionList.size());
+			System.out.println("here:"+transactionList);
 			boolean ans = false;
 			if (transactionList.size() > 0) {
-				ans = passbookDAO.updateLastUpdated(accountId);
+				ans = passbookDAO.updateLastUpdated(account);
 				if (ans) {
+					System.out.println(ans);
 					//logger.info(LoggerMessage.UPDATE_PASSBOOK_SUCCESSFUL);
 				}
 			}
@@ -84,24 +84,23 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 		
 		try {
 			List<Transaction> transactionList = new ArrayList<Transaction>();
-			Account account = new Account();
+ 			Account account = new Account();
 			account.setAccountId(accountId);
-			boolean accountExist = accountManagementService.validateAccountId(account);
-			if(!accountExist)
-			{
+			
+      		boolean accountExist = passbookDAO.accountValidation(account);
+			if (!accountExist) {
 				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
-		
+
+			transactionList = passbookDAO.accountSummary(accountId,startDate,endDate);
+//			System.out.println("here:"+transactionList);
 			
-			transactionList = passbookDAO.accountSummary(accountId, startDate, endDate);
-			
-			//logger.info(LoggerMessage.ACCOUNT_SUMMARY_SUCCESSFUL);
 			return transactionList;
 		} catch (Exception e) {
-			//logger.error(LoggerMessage.ACCOUNT_SUMMARY_ERROR);
+			//logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
 			throw new PassbookException(e.getMessage());
-
+			
+		}
 }
-	}
 }

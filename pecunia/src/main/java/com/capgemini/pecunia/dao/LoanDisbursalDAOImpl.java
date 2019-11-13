@@ -3,6 +3,7 @@ package com.capgemini.pecunia.dao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanDisbursalException;
 import com.capgemini.pecunia.exception.PecuniaException;
+import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanDisbursal;
 import com.capgemini.pecunia.repository.AccountRepository;
@@ -28,8 +30,8 @@ public class LoanDisbursalDAOImpl implements LoanDisbursalDAO {
 
 	@Override
 	public List<Loan> retrieveLoanList() throws IOException, PecuniaException, LoanDisbursalException {
-		ArrayList<Loan> reqList = new ArrayList<>();
-		reqList = (ArrayList<Loan>) loanRequestRepository.findAll();
+		System.out.println("here");
+		List<Loan>reqList =  loanRequestRepository.findAll();
 		if (reqList.size() > 0) {
 			return reqList;
 		} else {

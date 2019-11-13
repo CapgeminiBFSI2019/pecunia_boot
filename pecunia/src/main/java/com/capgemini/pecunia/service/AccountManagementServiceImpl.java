@@ -178,6 +178,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 				break;
 			}
 			account.setAccountId(id);
+			System.out.println("id going into query: "+id);
 			id = accountDAO.calculateAccountId(account);
 //			logger.info(Constants.ACCOUNT_ID_CALCULATED);
 			return id;
@@ -228,11 +229,16 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 		try {
 			String custId = accountDAO.addCustomerDetails(customer, address);
 			account.setCustomerId(custId);
+			System.out.println("cust Id: "+custId);
 			String accountId = calculateAccountId(account);
+			System.out.println("accountId: "+ accountId);
 			account.setAccountId(accountId);
 			account.setLastUpdated(LocalDateTime.now());
 			String createdId = accountDAO.addAccount(account);
+			System.out.println("createdId: "+createdId);
+			System.out.println("Acc created");
 			if (createdId == null) {
+				System.out.println("created ID: null");
 //				logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
 				throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 			}

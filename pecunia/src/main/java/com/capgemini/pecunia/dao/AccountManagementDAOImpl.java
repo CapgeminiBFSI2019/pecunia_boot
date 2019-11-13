@@ -1,6 +1,7 @@
 package com.capgemini.pecunia.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,21 +171,28 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 
 	@Override
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
-		String accId = null;
+//		String accId = null;
+		System.out.println("inside add acc DAO");
 		try {
+			System.out.println("inside try block");
 			Account newAccount = new Account();
+			newAccount.setAccountId(account.getAccountId());
 			newAccount.setCustomerId(account.getCustomerId());
 			newAccount.setBalance(account.getBalance());
 			newAccount.setBranchId(account.getBranchId());
 			newAccount.setInterest(account.getInterest());
 			newAccount.setType(account.getType());
 			newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
-
+			newAccount.setLastUpdated(account.getLastUpdated());
+			newAccount = accountRepository.save(newAccount);
+			System.out.println("Acc Id in DAo: "+account.getAccountId());
+			System.out.println("values set");
 		} catch (Exception e) {
-
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
-		return accId;
+		return account.getAccountId();
 	}
 
 	@Override
@@ -192,17 +200,23 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		long oldId = 0;
 		String oldIdstr = null;
 		String id = null;
+		System.out.println("inside Calc acc id dao");
 		try {
-			Optional<Account> accountRequested = accountRepository.findByAccountIdLike(account.getAccountId());
-			if(accountRequested.isPresent()) {
-				oldIdstr = accountRequested.get().getAccountId();
+			List<Account> accList = accountRepository.findByAccountIdLikeOrderByAccountIdDesc(account.getAccountId()+"%");
+			if(accList.size()!=0) {
+				Account accountRequested = accList.get(0);
+				System.out.println("acc pattern present");
+				oldIdstr = accountRequested.getAccountId();
+				System.out.println("old id: "+oldIdstr);
 			}
 			else {
 				oldIdstr = account.getAccountId()+ "00000";
 			}
 			oldId = Long.parseLong(oldIdstr);
 			id = Long.toString(oldId + 1);
+			System.out.println("acc Id: "+id);
 		}catch (Exception e) {
+			e.printStackTrace();
 //			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
@@ -221,6 +235,17 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	public Account showAccountDetails(Account account)
 			throws AccountException, PecuniaException {
 		// TODO Auto-generated method stub
-		return null;
+		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());	
+		Account acc = null;
+		if(accountRequested.isPresent())
+		{
+			acc = accountRequested.get();
+		}
+		else
+		{
+			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+		}
+		
+		return acc;
 	}
 }
