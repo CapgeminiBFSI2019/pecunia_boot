@@ -171,17 +171,22 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	@Override
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
 		String accId = null;
+		System.out.println("inside add acc DAO");
 		try {
+			System.out.println("inside try block");
 			Account newAccount = new Account();
+			newAccount.setAccountId(account.getAccountId());
 			newAccount.setCustomerId(account.getCustomerId());
 			newAccount.setBalance(account.getBalance());
 			newAccount.setBranchId(account.getBranchId());
 			newAccount.setInterest(account.getInterest());
 			newAccount.setType(account.getType());
 			newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
-
+			newAccount.setLastUpdated(account.getLastUpdated());
+			System.out.println("values set");
 		} catch (Exception e) {
-
+			System.out.println(e.getMessage());
+			e.printStackTrace();
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
 		return accId;
@@ -192,9 +197,11 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		long oldId = 0;
 		String oldIdstr = null;
 		String id = null;
+		System.out.println("inside Calc acc id dao");
 		try {
 			Optional<Account> accountRequested = accountRepository.findByAccountIdLike(account.getAccountId());
 			if(accountRequested.isPresent()) {
+				System.out.println("acc pattern present");
 				oldIdstr = accountRequested.get().getAccountId();
 			}
 			else {
@@ -202,6 +209,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 			oldId = Long.parseLong(oldIdstr);
 			id = Long.toString(oldId + 1);
+			System.out.println("acc Id: "+id);
 		}catch (Exception e) {
 //			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
