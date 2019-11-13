@@ -16,25 +16,21 @@ import com.capgemini.pecunia.repository.ChequeRepository;
 import com.capgemini.pecunia.repository.TransactionRepository;
 
 @Component
-public class TransactionDAOImpl implements TransactionDAO{
+public class TransactionDAOImpl implements TransactionDAO {
 	@Autowired
 	AccountRepository accountRepository;
 	@Autowired
 	ChequeRepository chequeRepository;
 	@Autowired
 	TransactionRepository transactionRepository;
-	
+
 	@Override
 	public double getBalance(Account account) throws PecuniaException, TransactionException {
-		System.out.println("getbalance mai :"+account.getAccountId());
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 		double balance = 0.0;
-		if(accountRequested.isPresent())
-		{
+		if (accountRequested.isPresent()) {
 			balance = accountRequested.get().getBalance();
-		}
-		else
-		{
+		} else {
 			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
 		return balance;
@@ -43,27 +39,21 @@ public class TransactionDAOImpl implements TransactionDAO{
 	@Override
 	public boolean updateBalance(Account account) throws PecuniaException, TransactionException {
 		boolean success = false;
-		try
-		{
+		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
-			
-			if(accountRequested.isPresent())
-			{
+
+			if (accountRequested.isPresent()) {
 				Account accountEntity = accountRequested.get();
 				accountEntity.setBalance(account.getBalance());
 				accountRepository.save(accountEntity);
 				success = true;
-			}
-			else
-			{
+			} else {
 				throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
-		}
-		catch (Exception e) {
-			System.out.println("idhar exception aya");
+		} catch (Exception e) {
 			throw new TransactionException(e.getMessage());
 		}
-		
+
 		return success;
 	}
 
@@ -81,8 +71,7 @@ public class TransactionDAOImpl implements TransactionDAO{
 			chequeEntity.setStatus(cheque.getStatus());
 			chequeEntity = chequeRepository.save(chequeEntity);
 			chequeId = chequeEntity.getId();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 //			logger.error(ErrorConstants.CHEQUE_INSERTION_ERROR);
 			throw new PecuniaException(ErrorConstants.CHEQUE_INSERTION_ERROR);
 		}
@@ -116,15 +105,12 @@ public class TransactionDAOImpl implements TransactionDAO{
 	public Account getAccountById(String id) throws PecuniaException, TransactionException {
 		Optional<Account> account = accountRepository.findById(id);
 		Account requestedAccount = null;
-		if(account.isPresent())
-		{
+		if (account.isPresent()) {
 			requestedAccount = account.get();
-		}
-		else
-		{
+		} else {
 			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
 		return requestedAccount;
 	}
-	
+
 }
