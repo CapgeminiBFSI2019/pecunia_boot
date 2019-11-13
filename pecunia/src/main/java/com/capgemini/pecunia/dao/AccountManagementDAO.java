@@ -25,8 +25,6 @@ public interface AccountManagementDAO {
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException;
 
 	public String calculateAccountId(Account account) throws PecuniaException, AccountException;
-
-	public boolean validateAccountId(Account account) throws PecuniaException, AccountException;
 	
 	public Account showAccountDetails(Account account) throws AccountException,PecuniaException;
 }

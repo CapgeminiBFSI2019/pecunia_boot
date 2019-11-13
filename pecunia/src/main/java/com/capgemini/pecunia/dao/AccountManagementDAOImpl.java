@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +32,8 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 	@Autowired
 	AddressRepository addressRepository;
 
+	private static final Logger logger = LoggerFactory.getLogger(AccountManagementDAOImpl.class);
+
 	@Override
 	public boolean updateCustomerName(Account account, Customer customer) throws PecuniaException, AccountException {
 		boolean isUpdated = false;
@@ -37,7 +41,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 			if (accountRequested.isPresent()) {
-				if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+				if (Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
 					throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
 				}
 				custId = accountRequested.get().getCustomerId();
@@ -52,30 +56,33 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
-//		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
 		return isUpdated;
 	}
 
 	@Override
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException {
 		boolean isDeleted = false;
-		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
-		if (accountRequested.isPresent()) {
-			if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
-				throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
+		try {
+			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
+			if (accountRequested.isPresent()) {
+				if (Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+					throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
+				}
+				Account newAccount = accountRequested.get();
+				newAccount.setStatus(Constants.ACCOUNT_STATUS[1]);
+				newAccount = accountRepository.save(newAccount);
+				isDeleted = true;
+			} else {
+				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
-			Account newAccount = accountRequested.get();
-			System.out.println("Before update status :" + newAccount.getStatus());
-			newAccount.setStatus(Constants.ACCOUNT_STATUS[1]);
-			newAccount=accountRepository.save(newAccount);
-			System.out.println("Updated status : "+newAccount.getStatus());
-			isDeleted = true;
-		} else {
-			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new AccountException(ErrorConstants.DELETE_ACCOUNT_ERROR);
 		}
+
 		return isDeleted;
 	}
 
@@ -86,7 +93,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 			if (accountRequested.isPresent()) {
-				if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+				if (Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
 					throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
 				}
 				custId = accountRequested.get().getCustomerId();
@@ -101,10 +108,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
-//		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -116,7 +122,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 			if (accountRequested.isPresent()) {
-				if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+				if (Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
 					throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
 				}
 				custId = accountRequested.get().getCustomerId();
@@ -140,10 +146,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 				throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
-//			logger.error(e.getMessage());
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
 		}
-//		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
 		return isUpdated;
 	}
 
@@ -173,11 +178,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			newCustomer.setAddressId(addrId);
 			newCustomer = customerRepository.save(newCustomer);
 			custId = newCustomer.getCustomerId();
-
-		}
-
-		catch (Exception e) {
-
+		} catch (Exception e) {
 			throw new AccountException(ErrorConstants.ADD_DETAILS_ERROR);
 		}
 		return custId;
@@ -185,10 +186,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 
 	@Override
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
-//		String accId = null;
-		System.out.println("inside add acc DAO");
 		try {
-			System.out.println("inside try block");
 			Account newAccount = new Account();
 			newAccount.setAccountId(account.getAccountId());
 			newAccount.setCustomerId(account.getCustomerId());
@@ -199,14 +197,11 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
 			newAccount.setLastUpdated(account.getLastUpdated());
 			newAccount = accountRepository.save(newAccount);
-			System.out.println("Acc Id in DAo: "+account.getAccountId());
-			System.out.println("values set");
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
-		return account.getAccountId();
+		return account.getAccountId();	
 	}
 
 	@Override
@@ -214,57 +209,33 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		long oldId = 0;
 		String oldIdstr = null;
 		String id = null;
-		System.out.println("inside Calc acc id dao");
 		try {
-			List<Account> accList = accountRepository.findByAccountIdLikeOrderByAccountIdDesc(account.getAccountId()+"%");
-			if(accList.size()!=0) {
+			List<Account> accList = accountRepository
+					.findByAccountIdLikeOrderByAccountIdDesc(account.getAccountId() + "%");
+			if (accList.size() != 0) {
 				Account accountRequested = accList.get(0);
-				System.out.println("acc pattern present");
 				oldIdstr = accountRequested.getAccountId();
-				System.out.println("old id: "+oldIdstr);
-			}
-			else {
-				oldIdstr = account.getAccountId()+ "00000";
+			} else {
+				oldIdstr = account.getAccountId() + "00000";
 			}
 			oldId = Long.parseLong(oldIdstr);
 			id = Long.toString(oldId + 1);
-			System.out.println("acc Id: "+id);
-		}catch (Exception e) {
-			e.printStackTrace();
-//			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
-//		logger.info(Constants.UPDATE_NAME_SUCCESSFUL);
 		return id;
 	}
 
 	@Override
-	public boolean validateAccountId(Account account)
-			throws PecuniaException, AccountException {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Account showAccountDetails(Account account)
-			throws AccountException, PecuniaException {
-		System.out.println("Inside acc dao impl");
-		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());	
+	public Account showAccountDetails(Account account) throws AccountException, PecuniaException {
+		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 		Account accountNew;
-		if(accountRequested.isPresent())
-		{
-//			accountNew.setAccountId(accountRequested.get().getAccountId());
-//			accountNew.setBalance(accountRequested.get().getBalance());
-//			accountNew.setBranchId(accountRequested.get().getBranchId());
-//			accountNew.setCustomerId(customerId);
+		if (accountRequested.isPresent()) {
 			accountNew = accountRequested.get();
-			System.out.println("Account balance: "+ accountNew.getBalance());
-		}
-		else
-		{
+		} else {
 			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
-		
 		return accountNew;
 	}
 }

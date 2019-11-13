@@ -19,8 +19,6 @@ public interface AccountManagementService {
 	public String addAccount(Customer customer, Address address, Account account) throws PecuniaException, AccountException;
 
 	public String calculateAccountId(Account account) throws PecuniaException, AccountException;
-
-	public boolean validateAccountId(Account account) throws PecuniaException, AccountException;
 	
 	public Account showAccountDetails(Account account) throws AccountException,PecuniaException;
 }
