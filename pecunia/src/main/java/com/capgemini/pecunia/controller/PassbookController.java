@@ -23,14 +23,12 @@ import com.google.gson.JsonObject;
 @RestController
 public class PassbookController {
 	
-	@Autowired
-	Transaction accountSummary;
+	
 	@Autowired
 	PassbookMaintenanceService Passbook;
 	@Autowired
 	PassbookMaintenanceService account;
-	@Autowired
-	Transaction updatePassbook;
+	
 	
 	@CrossOrigin(origins = "http://localhost:4200")  
 	@PostMapping(path = "/accountSummary")

@@ -46,13 +46,14 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			List<Transaction> transactionList = new ArrayList<Transaction>();
  			Account account = new Account();
 			account.setAccountId(accountId);
-			boolean accountExist = accountManagementService.validateAccountId(account);
-			if (!accountExist) {
-				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
-			}
+//			boolean accountExist = accountManagementService.validateAccountId(account);
+//			if (!accountExist) {
+//				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+//				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
+//			}
 
 			transactionList = passbookDAO.updatePassbook(accountId);
+			System.out.println(transactionList.size());
 			boolean ans = false;
 			if (transactionList.size() > 0) {
 				ans = passbookDAO.updateLastUpdated(accountId);
