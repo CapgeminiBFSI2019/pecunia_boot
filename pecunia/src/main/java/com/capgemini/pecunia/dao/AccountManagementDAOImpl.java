@@ -1,6 +1,7 @@
 package com.capgemini.pecunia.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +171,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 
 	@Override
 	public String addAccount(Account account) throws PecuniaException, AccountException, SQLException {
-		String accId = null;
+//		String accId = null;
 		System.out.println("inside add acc DAO");
 		try {
 			System.out.println("inside try block");
@@ -183,13 +184,15 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			newAccount.setType(account.getType());
 			newAccount.setStatus(Constants.ACCOUNT_STATUS[0]);
 			newAccount.setLastUpdated(account.getLastUpdated());
+			newAccount = accountRepository.save(newAccount);
+			System.out.println("Acc Id in DAo: "+account.getAccountId());
 			System.out.println("values set");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}
-		return accId;
+		return account.getAccountId();
 	}
 
 	@Override
@@ -199,10 +202,12 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		String id = null;
 		System.out.println("inside Calc acc id dao");
 		try {
-			Optional<Account> accountRequested = accountRepository.findByAccountIdLike(account.getAccountId());
-			if(accountRequested.isPresent()) {
+			List<Account> accList = accountRepository.findByAccountIdLikeOrderByAccountIdDesc(account.getAccountId()+"%");
+			if(accList.size()!=0) {
+				Account accountRequested = accList.get(0);
 				System.out.println("acc pattern present");
-				oldIdstr = accountRequested.get().getAccountId();
+				oldIdstr = accountRequested.getAccountId();
+				System.out.println("old id: "+oldIdstr);
 			}
 			else {
 				oldIdstr = account.getAccountId()+ "00000";
@@ -211,6 +216,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			id = Long.toString(oldId + 1);
 			System.out.println("acc Id: "+id);
 		}catch (Exception e) {
+			e.printStackTrace();
 //			logger.error(e.getMessage());
 			throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 		}

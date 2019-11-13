@@ -235,7 +235,10 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			account.setAccountId(accountId);
 			account.setLastUpdated(LocalDateTime.now());
 			String createdId = accountDAO.addAccount(account);
+			System.out.println("createdId: "+createdId);
+			System.out.println("Acc created");
 			if (createdId == null) {
+				System.out.println("created ID: null");
 //				logger.error(ErrorConstants.ACCOUNT_CREATION_ERROR);
 				throw new AccountException(ErrorConstants.ACCOUNT_CREATION_ERROR);
 			}
