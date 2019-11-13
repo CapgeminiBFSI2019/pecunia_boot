@@ -13,6 +13,7 @@ import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
 
 import com.capgemini.pecunia.service.LoginService;
+import com.capgemini.pecunia.util.Constants;
 import com.google.gson.JsonObject;
 
 @RestController
@@ -41,6 +42,7 @@ public class LoginController {
 			try {
 				boolean isValidated = loginService.validateEmail(login);
 				dataResponse.addProperty("success", true);
+				dataResponse.addProperty("message", Constants.LOGIN_SUCCESSFUL);
 				dataResponse.addProperty("Login Id", isValidated);
 
 			} catch (PecuniaException | LoginException e) {
