@@ -37,6 +37,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 			if (accountRequested.isPresent()) {
+				if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+					throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
+				}
 				custId = accountRequested.get().getCustomerId();
 				Optional<Customer> customerRequested = customerRepository.findById(custId);
 				if (customerRequested.isPresent()) {
@@ -78,6 +81,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 			if (accountRequested.isPresent()) {
+				if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+					throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
+				}
 				custId = accountRequested.get().getCustomerId();
 				Optional<Customer> customerRequested = customerRepository.findById(custId);
 				if (customerRequested.isPresent()) {
@@ -105,6 +111,9 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 		try {
 			Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 			if (accountRequested.isPresent()) {
+				if(Constants.ACCOUNT_STATUS[1].equals(accountRequested.get().getStatus())) {
+					throw new AccountException(ErrorConstants.CLOSED_ACCOUNT);
+				}
 				custId = accountRequested.get().getCustomerId();
 				Optional<Customer> customerRequested = customerRepository.findById(custId);
 				if (customerRequested.isPresent()) {
@@ -236,16 +245,21 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			throws AccountException, PecuniaException {
 		// TODO Auto-generated method stub
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());	
-		Account acc = null;
+		Account accountNew;
 		if(accountRequested.isPresent())
 		{
-			acc = accountRequested.get();
+//			accountNew.setAccountId(accountRequested.get().getAccountId());
+//			accountNew.setBalance(accountRequested.get().getBalance());
+//			accountNew.setBranchId(accountRequested.get().getBranchId());
+//			accountNew.setCustomerId(customerId);
+			accountNew = accountRequested.get();
+			System.out.println("Account balance: "+ accountNew.getBalance());
 		}
 		else
 		{
 			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
 		
-		return acc;
+		return accountNew;
 	}
 }
