@@ -11,43 +11,35 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanRequest;
 import com.capgemini.pecunia.repository.LoanRequestRepository;
-import com.capgemini.pecunia.util.Constants;
-
-
+	
 @Component
-public class LoanRequestDAOImpl implements LoanRequestDAO{
+public class LoanRequestDAOImpl implements LoanRequestDAO {
 
-	private static final Logger logger=LoggerFactory.getLogger(LoanDisbursalDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(LoanDisbursalDAO.class);
 
 	@Autowired
-	LoanRequestRepository loanRequestRepository ;
-	
+	LoanRequestRepository loanRequestRepository;
+
 	@Override
 	public int addLoanDetails(LoanRequest loan) throws PecuniaException, LoanException {
-		int loanId=0;
+		int loanId = 0;
 		try {
-			Loan loanRequestEntity=new Loan();
+			Loan loanRequestEntity = new Loan();
 			loanRequestEntity.setAccountId(loan.getAccountId());
 			loanRequestEntity.setAmount(loan.getAmount());
 			loanRequestEntity.setCreditScore(loan.getCreditScore());
-			loanRequestEntity.setEmi(loan.getEmi());	
+			loanRequestEntity.setEmi(loan.getEmi());
 			loanRequestEntity.setRoi(loan.getRoi());
 			loanRequestEntity.setTenure(loan.getTenure());
 			loanRequestEntity.setType(loan.getType());
 			loanRequestEntity.setStatus(loan.getStatus());
-//			loanRequestEntity.setLoanId(loan.getLoanId());
-			loanRequestEntity=loanRequestRepository.save(loanRequestEntity);
-			loanId=loanRequestEntity.getLoanId();
-		}
-		catch (Exception e)
-		{
+			loanRequestEntity = loanRequestRepository.save(loanRequestEntity);
+			loanId = loanRequestEntity.getLoanId();
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.LOAN_ADD_ERROR);
 		}
-		//return loanId;
-		return loanId ;
-		
-	}
-	}
+		return loanId;
 
-
+	}
+}
