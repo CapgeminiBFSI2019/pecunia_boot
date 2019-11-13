@@ -42,17 +42,18 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 	}
 
 	@Override
-	public boolean updateLastUpdated(String accountId) throws PecuniaException, PassbookException {
+	public boolean updateLastUpdated(Account account) throws PecuniaException, PassbookException {
 	
+		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 		boolean isUpdated = false;
-		try {
-
-			isUpdated= passbook.findByTime( LocalDateTime.now().plusMinutes(330), accountId);
-         
+		if(accountRequested.isPresent())
+		{
+			Account accountEntity = accountRequested.get();
+			accountEntity.setLastUpdated(LocalDateTime.now().plusMinutes(330));
+			accountRepository.save(accountEntity);
+			isUpdated = true;
 		}
-		catch(Exception e) {
-            throw new PassbookException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
-        }
+		 System.out.println(isUpdated);
 		return isUpdated;
 	}
 

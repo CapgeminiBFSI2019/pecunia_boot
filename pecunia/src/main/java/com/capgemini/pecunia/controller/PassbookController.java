@@ -43,7 +43,7 @@ public class PassbookController {
 	 ********************************************************************************************************/
 	
 	public String accountSummary(@RequestBody Map<String, Object> requestData) {
-		
+		 System.out.println("inside account summary");
 
 
 		String accountID = requestData.get("accountID").toString();
@@ -79,8 +79,7 @@ public class PassbookController {
 		
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
-	@PostMapping(path = "/updatePassbook")
+	
 	
 	/*******************************************************************************************************
 	 * - Function Name : updatePassbook(@RequestBody Map<String, Object> requestData) 
@@ -90,9 +89,10 @@ public class PassbookController {
 	 * - Creation Date :02/11/2019 
 	 * - Description : Update transaction details in passbook
 	 ********************************************************************************************************/
-	
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/updatePassbook")
 	public String updatePassbook(@RequestBody Map<String, Object> requestData) {
-		
+		System.out.println("inside controller");
 		String accountID = requestData.get("accountID").toString();
 				
 		JsonArray jsonArray = new JsonArray();
