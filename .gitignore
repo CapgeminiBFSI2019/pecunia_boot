@@ -49,3 +49,4 @@ target/
 .worksheet
 pom.properties
 *.jar
+*.log

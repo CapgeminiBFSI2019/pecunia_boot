@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.capgemini.pecunia.Application;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.exception.PecuniaException;
@@ -20,7 +23,7 @@ import com.capgemini.pecunia.repository.PassbookRepository;
 
 @Component
 public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
-
+	private static final Logger logger=LoggerFactory.getLogger(Application.class);
 	@Autowired
 	PassbookRepository passbook;
 	
@@ -64,14 +67,15 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 		
 		try {
 
-			transList= passbook.getAccountSummary(accountId, startDate, endDate);
+			transList= passbook.getAccountSummary(accountId, startDate.atStartOfDay(), endDate.atStartOfDay());
          }
 		catch(Exception e) {
+			logger.error(e.getMessage());
             throw new PassbookException(ErrorConstants.TECH_ERROR);
         }
 	 return transList;
 	}
-
+ 
 	@Override
 	public boolean accountValidation(Account account) throws PecuniaException, PassbookException{
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
