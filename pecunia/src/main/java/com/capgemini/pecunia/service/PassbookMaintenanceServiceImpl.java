@@ -22,8 +22,6 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 	
 	@Autowired
 	PassbookMaintenanceDAO passbookDAO;
-	@Autowired
-	AccountManagementService accountManagementService;
 	
 	
 //	Logger logger = Logger.getRootLogger();
@@ -46,11 +44,11 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			List<Transaction> transactionList = new ArrayList<Transaction>();
  			Account account = new Account();
 			account.setAccountId(accountId);
-//			boolean accountExist = accountManagementService.validateAccountId(account);
-//			if (!accountExist) {
-//				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-//				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
-//			}
+      		boolean accountExist = passbookDAO.accountValidation(account);
+			if (!accountExist) {
+				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
+			}
 
 			transactionList = passbookDAO.updatePassbook(accountId);
 			System.out.println(transactionList.size());
