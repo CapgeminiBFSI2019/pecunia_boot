@@ -28,6 +28,17 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 
 	@Autowired
 	AccountRepository accountRepository;
+	
+	/*******************************************************************************************************
+	 * - Function Name : updatePassbook(String accountId) 
+	 * - Input Parameters : String accountId
+	 * - Return Type : List 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Mansi Agarwal
+	 * - Creation Date : 14/11/2019 
+	 * - Description : Update transaction details in passbook
+	 ********************************************************************************************************/
+	
 
 	@Override
 	public List<Transaction> updatePassbook(String accountId) throws PassbookException, PecuniaException {
@@ -43,6 +54,16 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 		return transList;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : updateLAstUpdated(Account account) 
+	 * - Input Parameters : String accountId
+	 * - Return Type : List 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Mansi Agarwal
+	 * - Creation Date : 14/11/2019 
+	 * - Description : Update transaction details in passbook
+	 ********************************************************************************************************/
+	
 	@Override
 	public boolean updateLastUpdated(Account account) throws PecuniaException, PassbookException {
 
@@ -57,6 +78,16 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 		return isUpdated;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : accountSummary(String accountId, Date startDate, Date endDate) 
+	 * - Input Parameters : String accountId, Date startDate, Date endDate
+	 * - Return Type : List 
+	 * - Throws : PecuniaException, PassbookException 
+	 * - Author : Rishav Dev
+	 * - Creation Date : 14/11/2019 
+	 * - Description : Provides the account summary
+	 ********************************************************************************************************/
+	
 	@Override
 	public List<Transaction> accountSummary(String accountId, LocalDate startDate, LocalDate endDate)
 			throws PassbookException, PecuniaException {
@@ -71,6 +102,16 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
 		return transList;
 	}
 
+	/*******************************************************************************************************
+	 * - Function Name : accountValidation(String accountId) 
+	 * - Input Parameters : Account account
+	 * - Return Type : boolean 
+	 * - Throws : PecuniaException, PassbookException
+	 * - Author : Mansi Agarwal
+	 * - Creation Date : 14/11/2019 
+	 * - Description : Validating the account
+	 ********************************************************************************************************/
+	
 	@Override
 	public boolean accountValidation(Account account) throws PecuniaException, PassbookException {
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());

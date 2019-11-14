@@ -28,10 +28,12 @@ public class PassbookController {
 	PassbookMaintenanceService account;
 
 	/*******************************************************************************************************
-	 * - Function Name : accountSummary(@RequestBody Map<String, Object>
-	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
-	 * requestData - Return Type : String - Author : Rishav Dev - Creation Date :
-	 * 02/11/2019 - Description : Provides the account summary
+	 * - Function Name : accountSummary(@RequestBody Map<String, Object>requestData)
+	 * - Input Parameters : @RequestBody Map<String, Object>requestData 
+	 * - Return Type : String 
+	 * - Author : Rishav Dev 
+	 * - Creation Date : 02/11/2019
+	 * - Description : Provides the account summary
 	 ********************************************************************************************************/
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/accountSummary")
@@ -54,7 +56,6 @@ public class PassbookController {
 					jsonArray.add(gson.toJson(transaction, Transaction.class));
 				}
 				dataResponse.addProperty("success", true);
-				dataResponse.addProperty("message", "Account Summary \t");
 				dataResponse.add("data", jsonArray);
 			} else {
 				dataResponse.addProperty("success", true);
@@ -70,10 +71,12 @@ public class PassbookController {
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : updatePassbook(@RequestBody Map<String, Object>
-	 * requestData) - Input Parameters : @RequestBody Map<String, Object>
-	 * requestData - Return Type : String - Author : Mansi Agarwal - Creation Date
-	 * :02/11/2019 - Description : Update transaction details in passbook
+	 * - Function Name : updatePassbook(@RequestBody Map<String, Object>requestData) 
+	 * - Input Parameters : @RequestBody Map<String, Object> requestData 
+	 * - Return Type : String 
+	 * - Author : Mansi Agarwal 
+	 * - Creation Date :02/11/2019 
+	 * - Description : Update transaction details in passbook
 	 ********************************************************************************************************/
 	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping(path = "/updatePassbook")
@@ -94,7 +97,6 @@ public class PassbookController {
 					jsonArray.add(gson.toJson(transaction, Transaction.class));
 				}
 				dataResponse.addProperty("success", true);
-				dataResponse.addProperty("message", "Passbook \t");
 				dataResponse.add("data", jsonArray);
 			} else {
 				dataResponse.addProperty("success", true);

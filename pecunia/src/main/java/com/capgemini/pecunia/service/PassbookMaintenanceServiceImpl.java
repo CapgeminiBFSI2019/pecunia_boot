@@ -87,16 +87,15 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			
       		boolean accountExist = passbookDAO.accountValidation(account);
 			if (!accountExist) {
-				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 
 			transactionList = passbookDAO.accountSummary(accountId,startDate,endDate);
-//			System.out.println("here:"+transactionList);
 			
 			return transactionList;
 		} catch (Exception e) {
-			//logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
+			logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
 			throw new PassbookException(e.getMessage());
 			
 		}
