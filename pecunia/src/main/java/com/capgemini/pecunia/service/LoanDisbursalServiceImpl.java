@@ -21,7 +21,7 @@ import com.capgemini.pecunia.util.Constants;
 
 @Component
 public class LoanDisbursalServiceImpl implements LoanDisbursalService{
-	private static final Logger logger=LoggerFactory.getLogger(LoanDisbursalDAO.class);
+	private static final Logger logger=LoggerFactory.getLogger(LoanDisbursalService.class);
 	@Autowired
 	LoanDisbursalDAO loanDisbursedDAO;
 	@Autowired
