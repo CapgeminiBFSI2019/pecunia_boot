@@ -1,12 +1,15 @@
 package com.capgemini.pecunia.service;
 
 
+import org.springframework.stereotype.Service;
+
 import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.Address;
 import com.capgemini.pecunia.model.Customer;
 
+@Service
 public interface AccountManagementService {
 	public boolean deleteAccount(Account account) throws PecuniaException, AccountException;
 

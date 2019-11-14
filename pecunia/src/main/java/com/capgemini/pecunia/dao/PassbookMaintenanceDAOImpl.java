@@ -20,43 +20,40 @@ import com.capgemini.pecunia.model.Transaction;
 import com.capgemini.pecunia.repository.AccountRepository;
 import com.capgemini.pecunia.repository.PassbookRepository;
 
-
 @Component
-public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
-	private static final Logger logger=LoggerFactory.getLogger(Application.class);
+public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO {
+	private static final Logger logger = LoggerFactory.getLogger(Application.class);
 	@Autowired
 	PassbookRepository passbook;
-	
+
 	@Autowired
 	AccountRepository accountRepository;
-	
+
 	@Override
 	public List<Transaction> updatePassbook(String accountId) throws PassbookException, PecuniaException {
 		List<Transaction> transList = new ArrayList<>();
-		
+
 		try {
 
-			transList= passbook.findById(accountId, LocalDateTime.now().plusMinutes(330));
-         }
-		catch(Exception e) {
-            throw new PassbookException(ErrorConstants.UPDATE_PASSBOOK_ERROR);
-        }
-	 return transList;
+			transList = passbook.findById(accountId, LocalDateTime.now().plusMinutes(330));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new PassbookException(ErrorConstants.UPDATE_PASSBOOK_ERROR);
+		}
+		return transList;
 	}
 
 	@Override
 	public boolean updateLastUpdated(Account account) throws PecuniaException, PassbookException {
-	
+
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
 		boolean isUpdated = false;
-		if(accountRequested.isPresent())
-		{
+		if (accountRequested.isPresent()) {
 			Account accountEntity = accountRequested.get();
 			accountEntity.setLastUpdated(LocalDateTime.now().plusMinutes(330));
 			accountRepository.save(accountEntity);
 			isUpdated = true;
 		}
-		 System.out.println(isUpdated);
 		return isUpdated;
 	}
 
@@ -64,26 +61,23 @@ public class PassbookMaintenanceDAOImpl implements PassbookMaintenanceDAO{
 	public List<Transaction> accountSummary(String accountId, LocalDate startDate, LocalDate endDate)
 			throws PassbookException, PecuniaException {
 		List<Transaction> transList = new ArrayList<>();
-		
-		try {
 
-			transList= passbook.getAccountSummary(accountId, startDate.atStartOfDay(), endDate.atStartOfDay());
-         }
-		catch(Exception e) {
+		try {
+			transList = passbook.getAccountSummary(accountId, startDate.atStartOfDay(), endDate.atStartOfDay());
+		} catch (Exception e) {
 			logger.error(e.getMessage());
-            throw new PassbookException(ErrorConstants.TECH_ERROR);
-        }
-	 return transList;
+			throw new PassbookException(ErrorConstants.TECH_ERROR);
+		}
+		return transList;
 	}
- 
+
 	@Override
-	public boolean accountValidation(Account account) throws PecuniaException, PassbookException{
+	public boolean accountValidation(Account account) throws PecuniaException, PassbookException {
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
-		if(accountRequested.isPresent())
-		{
+		if (accountRequested.isPresent()) {
 			return true;
 		}
-		 return false;
+		return false;
 	}
-	
+
 }

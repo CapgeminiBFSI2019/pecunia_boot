@@ -2,6 +2,8 @@ package com.capgemini.pecunia.dao;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ public class TransactionDAOImpl implements TransactionDAO {
 	@Autowired
 	TransactionRepository transactionRepository;
 
+	private static final Logger logger = LoggerFactory.getLogger(TransactionDAOImpl.class);
+
 	@Override
 	public double getBalance(Account account) throws PecuniaException, TransactionException {
 		Optional<Account> accountRequested = accountRepository.findById(account.getAccountId());
@@ -31,6 +35,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 		if (accountRequested.isPresent()) {
 			balance = accountRequested.get().getBalance();
 		} else {
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
 		return balance;
@@ -51,6 +56,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 				throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new TransactionException(e.getMessage());
 		}
 
@@ -72,7 +78,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			chequeEntity = chequeRepository.save(chequeEntity);
 			chequeId = chequeEntity.getId();
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.CHEQUE_INSERTION_ERROR);
+			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.CHEQUE_INSERTION_ERROR);
 		}
 		return chequeId;
@@ -95,7 +101,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 			transactionEntity = transactionRepository.save(transactionEntity);
 			transactionId = transactionEntity.getId();
 		} catch (Exception e) {
-//			logger.error(ErrorConstants.TRANSACTION_INSERTION_ERROR);
+			logger.error(e.getMessage());
 			throw new PecuniaException(ErrorConstants.TRANSACTION_INSERTION_ERROR);
 		}
 		return transactionId;
@@ -108,6 +114,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 		if (account.isPresent()) {
 			requestedAccount = account.get();
 		} else {
+			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 			throw new TransactionException(ErrorConstants.NO_SUCH_ACCOUNT);
 		}
 		return requestedAccount;

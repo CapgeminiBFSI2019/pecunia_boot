@@ -26,7 +26,6 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 	AccountRepository accountRepository;
 	@Autowired
 	LoanRequestDAO loanDAO;
-	// Logger logger = Logger.getRootLogger();
 
 	/*******************************************************************************************************
 	 * -Function Name : calculateEMI(double amount, int tenure, double roi) -Input

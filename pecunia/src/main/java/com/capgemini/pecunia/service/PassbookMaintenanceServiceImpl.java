@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,7 @@ import com.capgemini.pecunia.exception.PassbookException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Account;
 import com.capgemini.pecunia.model.Transaction;
+import com.capgemini.pecunia.util.LoggerMessage;
 
 @Component
 public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceService {
@@ -20,9 +23,7 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 	@Autowired
 	PassbookMaintenanceDAO passbookDAO;
 	
-	
-//	Logger logger = Logger.getRootLogger();
-
+	private static final Logger logger = LoggerFactory.getLogger(PassbookMaintenanceServiceImpl.class);
 
 	/*******************************************************************************************************
 	 * - Function Name : updatePassbook(String accountId) 
@@ -44,7 +45,7 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			account.setAccountId(accountId);
       		boolean accountExist = passbookDAO.accountValidation(account);
 			if (!accountExist) {
-				//logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+				logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
 				throw new PassbookException(ErrorConstants.NO_SUCH_ACCOUNT);
 			}
 
@@ -55,12 +56,12 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 				ans = passbookDAO.updateLastUpdated(account);
 				if (ans) {
 					System.out.println(ans);
-					//logger.info(LoggerMessage.UPDATE_PASSBOOK_SUCCESSFUL);
+					logger.info(LoggerMessage.UPDATE_PASSBOOK_SUCCESSFUL);
 				}
 			}
 			return transactionList;
 		} catch (Exception e) {
-			//logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
+			logger.error(ErrorConstants.UPDATE_PASSBOOK_ERROR);
 			throw new PassbookException(e.getMessage());
 			
 		}

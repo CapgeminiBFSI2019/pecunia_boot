@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 @RestController
-public class AccountController {	
+public class AccountController {
 
 	@Autowired
 	AccountManagementService accManagementService;

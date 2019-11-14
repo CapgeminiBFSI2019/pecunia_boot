@@ -34,24 +34,10 @@ public class Customer {
 	@Column(name = "dob")
 	private LocalDate dob;
 
-	public Customer(String customerId, String name, String addressId, String aadhar, String pan, String contact, String gender,
-			LocalDate dob) {
-		super();
-		this.customerId= customerId;
-		this.name = name;
-		this.addressId = addressId;
-		this.aadhar = aadhar;
-		this.pan = pan;
-		this.contact = contact;
-		this.gender = gender;
-		this.dob = dob;
-	}
-	
 	public Customer() {
-		
+
 	}
 
-	
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -59,7 +45,7 @@ public class Customer {
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -117,4 +103,3 @@ public class Customer {
 	}
 
 }
-

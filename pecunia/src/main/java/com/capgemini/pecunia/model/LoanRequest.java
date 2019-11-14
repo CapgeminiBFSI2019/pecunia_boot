@@ -36,20 +36,6 @@ public class LoanRequest {
 
 	}
 
-	public LoanRequest(int loanId, String accountId, double amount, String type, int tenure, double roi, String status,
-			double emi, int creditScore) {
-		super();
-		this.loanId = loanId;
-		this.accountId = accountId;
-		this.amount = amount;
-		this.type = type;
-		this.tenure = tenure;
-		this.roi = roi;
-		this.status = status;
-		this.emi = emi;
-		this.creditScore = creditScore;
-	}
-
 	public double getEmi() {
 		return emi;
 	}
@@ -165,4 +151,3 @@ public class LoanRequest {
 	}
 
 }
-	

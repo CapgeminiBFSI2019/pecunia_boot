@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.capgemini.pecunia.model.Cheque;
 
-public interface ChequeRepository extends JpaRepository<Cheque, Integer>{
+public interface ChequeRepository extends JpaRepository<Cheque, Integer> {
 
 }
