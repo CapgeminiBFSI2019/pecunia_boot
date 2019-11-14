@@ -50,12 +50,10 @@ public class PassbookMaintenanceServiceImpl implements PassbookMaintenanceServic
 			}
 
 			transactionList = passbookDAO.updatePassbook(accountId);
-			System.out.println("here:"+transactionList);
 			boolean ans = false;
 			if (transactionList.size() > 0) {
 				ans = passbookDAO.updateLastUpdated(account);
 				if (ans) {
-					System.out.println(ans);
 					logger.info(LoggerMessage.UPDATE_PASSBOOK_SUCCESSFUL);
 				}
 			}

@@ -255,7 +255,6 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 			account.setAccountId(accId.get(i));
 			double oldBalance = transactionDAOImpl.getBalance(account);
 			double totalEMI = loanDisbursedDAO.totalEmi(accId.get(i));
-			System.out.println(totalEMI);
 			double updatedBalance = oldBalance - totalEMI;
 
 			if (updatedBalance < 0) {

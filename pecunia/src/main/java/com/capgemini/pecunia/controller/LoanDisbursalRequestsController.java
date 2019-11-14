@@ -57,7 +57,6 @@ public class LoanDisbursalRequestsController {
 
 			try {
 				retrieveAll = loanDisbursalService.rejectedLoanRequests();
-				System.out.println("number of loan disbursal" + retrieveAll.size());
 				if (retrieveAll.size() > 0) {
 					for (Loan loanReqs : retrieveAll) {
 						jsonArray.add(gson.toJson(loanReqs, Loan.class));
@@ -77,7 +76,6 @@ public class LoanDisbursalRequestsController {
 		else if (s.equals("Show the loan requests to be accepted")) {
 			try {
 				retrieveAll = loanDisbursalService.approveLoan();
-				System.out.println("number of loan disbursal" + retrieveAll.size());
 				if (retrieveAll.size() > 0) {
 					for (Loan loanReqs : retrieveAll) {
 						jsonArray.add(gson.toJson(loanReqs, Loan.class));

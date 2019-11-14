@@ -41,9 +41,6 @@ public class TransactionController {
 		String bankName = requestData.get("bankName").toString();
 		String ifsc = requestData.get("payeeIfsc").toString();
 
-		System.out.println(payeeAccountNumber + "\n" + beneficiaryAccountNumber + "\n" + chequeNumber + "\n" + payeeName
-				+ "\n" + amount + "\n" + chequeIssueDate + "\n" + bankName + "\n" + ifsc);
-
 		Transaction creditChequeTransaction = new Transaction();
 		creditChequeTransaction.setAmount(amount);
 		creditChequeTransaction.setAccountId(beneficiaryAccountNumber);
@@ -90,9 +87,6 @@ public class TransactionController {
 		double amount = Double.parseDouble(requestData.get("debitChequeAmount").toString());
 		LocalDate chequeIssueDate = LocalDate.parse(requestData.get("issueDate").toString());
 		String ifsc = requestData.get("ifsc").toString();
-
-		System.out.println(accountNumber + "\n" + debitChequeNumber + "\n" + holderName + "\n" + amount + "\n"
-				+ chequeIssueDate + "\n" + ifsc);
 
 		Transaction debitChequeTransaction = new Transaction();
 		debitChequeTransaction.setAmount(amount);

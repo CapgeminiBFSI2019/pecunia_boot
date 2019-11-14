@@ -31,7 +31,6 @@ public class LoginController {
 		String username = requestData.get("username").toString();
 		String password = requestData.get("password").toString();
 
-		System.out.println(username + "\n" + password);
 		login.setPassword(password);
 		login.setUsername(username);
 
