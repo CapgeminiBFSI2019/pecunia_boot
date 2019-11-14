@@ -8,52 +8,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.pecunia.model.Login;
 import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
-
+import com.capgemini.pecunia.model.Login;
 import com.capgemini.pecunia.service.LoginService;
 import com.capgemini.pecunia.util.Constants;
 import com.google.gson.JsonObject;
 
 @RestController
 public class LoginController {
-	
-      
-        @Autowired
-		LoginService loginService;
 
-		@CrossOrigin(origins = "http://localhost:4200")
-		@PostMapping(path = "/login")
-		
-		
-	
-		public String validateEmail(@RequestBody Map<String, Object> requestData) {
-			Login login = new Login();
-			JsonObject dataResponse = new JsonObject();
+	@Autowired
+	LoginService loginService;
 
-			String username = requestData.get("username").toString();
-			String password = requestData.get("password").toString();
-			
-			System.out.println(username + "\n" + password);
-			login.setPassword(password);
-			login.setUsername(username);
+	@CrossOrigin(origins = "http://localhost:4200")
+	@PostMapping(path = "/login")
 
-			try {
-				boolean isValidated = loginService.validateEmail(login);
-				dataResponse.addProperty("success", true);
-				dataResponse.addProperty("message", Constants.LOGIN_SUCCESSFUL);
-				dataResponse.addProperty("Login Id", isValidated);
+	public String validateEmail(@RequestBody Map<String, Object> requestData) {
+		Login login = new Login();
+		JsonObject dataResponse = new JsonObject();
 
-			} catch (PecuniaException | LoginException e) {
-				dataResponse.addProperty("success", false);
-				dataResponse.addProperty("message", e.getMessage());
-			}
-			return dataResponse.toString();
+		String username = requestData.get("username").toString();
+		String password = requestData.get("password").toString();
+
+		System.out.println(username + "\n" + password);
+		login.setPassword(password);
+		login.setUsername(username);
+
+		try {
+			boolean isValidated = loginService.validateEmail(login);
+			dataResponse.addProperty("success", true);
+			dataResponse.addProperty("message", Constants.LOGIN_SUCCESSFUL);
+			dataResponse.addProperty("Login Id", isValidated);
+
+		} catch (PecuniaException | LoginException e) {
+			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("message", e.getMessage());
 		}
+		return dataResponse.toString();
 	}
-
-//
-
-
-
+}

@@ -15,19 +15,20 @@ import com.capgemini.pecunia.service.LoanDisbursalService;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 @RestController
 public class LoanDisbursalDataController {
 	@Autowired
 	LoanDisbursalService loanDisbursalService;
 
-	@CrossOrigin(origins = "http://localhost:4200")  
+	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping(path = "/loandisbursaldata")
 	public String retrieveRequests() throws IOException {
-		JsonObject dataResponse = new JsonObject();  
+		JsonObject dataResponse = new JsonObject();
 		JsonArray jsonArray = new JsonArray();
 		Gson gson = new Gson();
 		ArrayList<LoanDisbursal> retrieveLoanDisbursedData = new ArrayList<LoanDisbursal>();
-		
+
 		try {
 			retrieveLoanDisbursedData = loanDisbursalService.approvedLoanList();
 			if (retrieveLoanDisbursedData.size() > 0) {
