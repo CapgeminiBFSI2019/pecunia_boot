@@ -3,6 +3,8 @@ package com.capgemini.pecunia.service;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ import com.capgemini.pecunia.util.Constants;
 
 @Component
 public class LoanDisbursalServiceImpl implements LoanDisbursalService{
+	private static final Logger logger=LoggerFactory.getLogger(LoanDisbursalDAO.class);
 	@Autowired
 	LoanDisbursalDAO loanDisbursedDAO;
 	@Autowired
@@ -38,11 +41,11 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 		ArrayList<Loan> retrievedLoanRequests = new ArrayList<Loan>();
 		retrievedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveLoanList();
 		if (retrievedLoanRequests.size() == 0) {
-			
+			logger.error(ErrorConstants.NO_LOAN_REQUESTS);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 
 		}
-	
+		logger.info(Constants.SHOW_LOAN_REQUESTS[0]);
 		return retrievedLoanRequests;
 	}
 
@@ -59,7 +62,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 		ArrayList<Loan> acceptedLoanRequests = new ArrayList<Loan>();
 		acceptedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveAcceptedLoanList();
 		if (acceptedLoanRequests.size() == 0) {
-		
+			logger.error(ErrorConstants.NO_LOAN_REQUESTS);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 
 		}
@@ -68,7 +71,7 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 			loanDisbursedDAO.updateStatus(loanId, Constants.LOAN_REQUEST_STATUS[1]);
 		}
 		loanDisbursedDAO.releaseLoanSheet(acceptedLoanRequests);
-	
+		logger.info(Constants.SHOW_LOAN_REQUESTS[1]);
 		return acceptedLoanRequests;
 
 	}
@@ -86,11 +89,11 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 		ArrayList<Loan> acceptedLoanRequests = new ArrayList<Loan>();
 		acceptedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveAcceptedLoanListWithoutStatus();
 		if (acceptedLoanRequests.size() == 0) {
-		
+			logger.info(Constants.SHOW_LOAN_REQUESTS[0]);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 
 		}
-
+		logger.info(Constants.SHOW_LOAN_DISBURSED_DATA);
 		return acceptedLoanRequests;
 
 	}
@@ -109,8 +112,8 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 		ArrayList<LoanDisbursal> approvedLoanList = new ArrayList<LoanDisbursal>();
 		approvedLoanList = (ArrayList<LoanDisbursal>) loanDisbursedDAO.loanApprovedList();
 		if (approvedLoanList.size() == 0) {
-			
-			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
+			logger.error(ErrorConstants.NO_LOAN_DISBURSAL_DATA);
+			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_DISBURSAL_DATA);
 		}
 
 		return approvedLoanList;
@@ -132,14 +135,14 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 		ArrayList<Loan> rejectedLoanRequests = new ArrayList<Loan>();
 		rejectedLoanRequests = (ArrayList<Loan>) loanDisbursedDAO.retrieveRejectedLoanList();
 		if (rejectedLoanRequests.size() == 0) {
-			
+			logger.error(ErrorConstants.NO_LOAN_DISBURSAL_DATA);
 			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
 		}
 		for (int index = 0; index < rejectedLoanRequests.size(); index++) {
 			int loanId = rejectedLoanRequests.get(index).getLoanId();
 			loanDisbursedDAO.updateStatus(loanId, Constants.LOAN_REQUEST_STATUS[2]);
 		}
-		
+		logger.info(Constants.SHOW_LOAN_REQUESTS[2]);
 		return rejectedLoanRequests;
 	}
 
@@ -188,8 +191,8 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 
 		else {
 			status = Constants.STATUS_CHECK[1];
-		
-			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
+		logger.error(ErrorConstants.NO_LOAN_STATUS_UPDATE);
+			throw new LoanDisbursalException(ErrorConstants.INVALID_ACCOUNT_EXCEPTION);
 		}
 
 		return status;
@@ -229,8 +232,8 @@ public class LoanDisbursalServiceImpl implements LoanDisbursalService{
 
 		} else {
 			status = Constants.STATUS_CHECK[1];
-		
-			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_REQUESTS);
+		logger.error(ErrorConstants.NO_LOAN_STATUS_UPDATE);
+			throw new LoanDisbursalException(ErrorConstants.NO_LOAN_STATUS_UPDATE);
 		}
 	
 		return status;
