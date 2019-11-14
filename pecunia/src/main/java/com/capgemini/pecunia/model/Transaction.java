@@ -43,9 +43,9 @@ public class Transaction {
 
 	@Column(name = "trans_closing_balance")
 	private double closingBalance;
-	
+
 	public Transaction() {
-		
+
 	}
 
 	public int getId() {
@@ -127,6 +127,5 @@ public class Transaction {
 	public void setClosingBalance(double closingBalance) {
 		this.closingBalance = closingBalance;
 	}
-	
-	
+
 }
