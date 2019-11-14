@@ -57,7 +57,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
+			throw new AccountException(e.getMessage());
 		}
 		return isUpdated;
 	}
@@ -80,7 +80,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new AccountException(ErrorConstants.DELETE_ACCOUNT_ERROR);
+			throw new AccountException(e.getMessage());
 		}
 
 		return isDeleted;
@@ -109,7 +109,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
+			throw new AccountException(e.getMessage());
 		}
 		return isUpdated;
 	}
@@ -147,7 +147,7 @@ public class AccountManagementDAOImpl implements AccountManagementDAO {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage());
-			throw new AccountException(ErrorConstants.UPDATE_ACCOUNT_ERROR);
+			throw new AccountException(e.getMessage());
 		}
 		return isUpdated;
 	}

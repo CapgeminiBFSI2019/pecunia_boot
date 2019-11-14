@@ -55,11 +55,13 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : creditUsingSlip(Transaction transaction) - Input Parameters
-	 * : transaction object - Return Type : int - Throws :
-	 * TransactionException,PecuniaException - Author : Arpan Mondal - Creation Date
-	 * : 23/09/2019 - Description : crediting amount using slip of the specified
-	 * account
+	 * - Function Name : creditUsingSlip(Transaction transaction) 
+	 * - Input Parameters: transaction object 
+	 * - Return Type : int  
+	 * - Throws : TransactionException,PecuniaException 
+	 * - Author : Arpan Mondal 
+	 * - Creation Date: 23/09/2019 
+	 * - Description : crediting amount using slip of the specified account
 	 ********************************************************************************************************/
 
 	@Override
@@ -130,11 +132,13 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : debitUsingSlip(Transaction transaction) - Input Parameters
-	 * : transaction object - Return Type : int - Throws :
-	 * TransactionException,PecuniaException - Author : Anwesha Das - Creation Date
-	 * : 23/09/2019 - Description : debiting amount using slip of the specified
-	 * account
+	 * - Function Name : debitUsingSlip(Transaction transaction)
+	 * - Input Parameters: transaction object 
+	 * - Return Type : int 
+	 * - Throws :TransactionException,PecuniaException 
+	 * - Author : Anwesha Das 
+	 * - Creation Date: 23/09/2019 
+	 * - Description : debiting amount using slip of the specified account
 	 ********************************************************************************************************/
 
 	public int debitUsingSlip(Transaction transaction) throws TransactionException, PecuniaException {
@@ -193,11 +197,13 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : creditUsingCheque(Transaction transaction,cheque cheque) -
-	 * Input Parameters : transaction object - Return Type : int - Throws :
-	 * TransactionException,PecuniaException - Author : Rohan Patil - Creation Date
-	 * : 23/09/2019 - Description : debiting amount using Cheque of the specified
-	 * account
+	 * - Function Name : creditUsingCheque(Transaction transaction,cheque cheque) 
+	 * - Input Parameters : transaction object 
+	 * - Return Type : int 
+	 * - Throws : TransactionException,PecuniaException 
+	 * - Author : Rohan Patil 
+	 * - Creation Date : 11/11/2019 
+	 * - Description : debiting amount using Cheque of the specified account
 	 ********************************************************************************************************/
 
 	@Override
@@ -322,11 +328,13 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	/*******************************************************************************************************
-	 * - Function Name : debitUsingCheque(Transaction transaction,cheque cheque) -
-	 * Input Parameters : transaction object - Return Type : int - Throws :
-	 * TransactionException,PecuniaException - Author : Anish Basu- Creation Date :
-	 * 23/09/2019 - Description : debiting amount using Cheque of the specified
-	 * account
+	 * - Function Name : debitUsingCheque(Transaction transaction,cheque cheque) 
+	 * - Input Parameters : transaction object 
+	 * - Return Type : int 
+	 * - Throws :TransactionException,PecuniaException 
+	 * - Author : Anish Basu
+	 * - Creation Date :23/09/2019 
+	 * - Description : debiting amount using Cheque of the specified account
 	 ********************************************************************************************************/
 
 	@Override
