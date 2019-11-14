@@ -44,7 +44,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			isUpdated = accountDAO.deleteAccount(account);
 
 		} catch (Exception e) {
-			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
+			logger.error(e.getMessage());
 			throw new AccountException(e.getMessage());
 		}
 		logger.info(Constants.DELETE_ACCOUNT_SUCCESSFUL);
@@ -201,7 +201,7 @@ public class AccountManagementServiceImpl implements AccountManagementService {
 			accountRequested = accountDAO.showAccountDetails(account);
 		} catch (AccountException | PecuniaException e) {
 			logger.error(ErrorConstants.NO_SUCH_ACCOUNT);
-			throw new AccountException(ErrorConstants.NO_SUCH_ACCOUNT);
+			throw new AccountException(e.getMessage());
 		}
 		return accountRequested;
 	}

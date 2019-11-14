@@ -204,17 +204,19 @@ public class AccountController {
 		Gson gson = new Gson();
 		JsonObject dataResponse = new JsonObject();
 		String accountId = id;
-
 		account.setAccountId(accountId);
+		String jsonInString = null;
 		try {
 
 			account = accManagementService.showAccountDetails(account);
-			String jsonInString = gson.toJson(account);
+			jsonInString = gson.toJson(account);
 			dataResponse.addProperty("success", true);
 			dataResponse.addProperty("data", jsonInString);
 			dataResponse.addProperty("message", accountId.toString());
 		} catch (PecuniaException | AccountException e) {
+			
 			dataResponse.addProperty("success", false);
+			dataResponse.addProperty("data", jsonInString);
 			dataResponse.addProperty("message", e.getMessage());
 		}
 		return dataResponse.toString();
