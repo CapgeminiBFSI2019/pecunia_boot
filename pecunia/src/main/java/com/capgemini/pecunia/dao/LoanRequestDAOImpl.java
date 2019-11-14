@@ -11,7 +11,7 @@ import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanRequest;
 import com.capgemini.pecunia.repository.LoanRequestRepository;
-	
+
 @Component
 public class LoanRequestDAOImpl implements LoanRequestDAO {
 

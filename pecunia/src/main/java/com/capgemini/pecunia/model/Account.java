@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-
 @Table(name = "account")
 public class Account {
 	@Id
@@ -28,26 +27,10 @@ public class Account {
 	private double interest;
 	@Column(name = "last_updated")
 	private LocalDateTime lastUpdated;
-	
 
 	public Account() {
 
 	}
-
-	public Account(String accountId, String customerId, String branchId, String type, String status, double balance,
-			double interest, LocalDateTime lastUpdated) {
-		super();
-		this.accountId = accountId;
-		this.customerId = customerId;
-		this.branchId = branchId;
-		this.type = type;
-		this.status = status;
-		this.balance = balance;
-		this.interest = interest;
-		this.lastUpdated = lastUpdated;
-	}
-	
-	
 
 	public String getAccountId() {
 		return accountId;
@@ -112,7 +95,5 @@ public class Account {
 	public void setLastUpdated(LocalDateTime lastUpdated) {
 		this.lastUpdated = lastUpdated;
 	}
-
-	
 
 }

@@ -1,7 +1,5 @@
 package com.capgemini.pecunia.model;
 
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -27,16 +25,16 @@ public class Login {
 	@Column(name = "secret_key")
 	private String secretKey;
 
+	public Login() {
+
+	}
+
 	public String getSecretKey() {
 		return secretKey;
 	}
 
 	public void setSecretKey(String secretKey) {
 		this.secretKey = secretKey;
-	}
-
-	public Login() {
-
 	}
 
 	public String getUsername() {

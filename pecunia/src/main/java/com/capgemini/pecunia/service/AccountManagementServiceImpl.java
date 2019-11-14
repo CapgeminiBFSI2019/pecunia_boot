@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.capgemini.pecunia.dao.AccountManagementDAO;
 import com.capgemini.pecunia.exception.AccountException;
@@ -16,7 +16,7 @@ import com.capgemini.pecunia.model.Address;
 import com.capgemini.pecunia.model.Customer;
 import com.capgemini.pecunia.util.Constants;
 
-@Service
+@Component
 public class AccountManagementServiceImpl implements AccountManagementService {
 
 	private static final Logger logger = LoggerFactory.getLogger(AccountManagementServiceImpl.class);

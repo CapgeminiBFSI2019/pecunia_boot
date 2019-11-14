@@ -11,83 +11,82 @@ import javax.persistence.Table;
 @Table(name = "loan_disbursal")
 
 public class LoanDisbursal {
-	
-	 @Id
-	 @GeneratedValue(strategy = GenerationType.IDENTITY)
-	 @Column(name = "loan_disbursal_id")
-	private int loanDisbursalId;	 
-	 @Column(name = "loan_id")
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "loan_disbursal_id")
+	private int loanDisbursalId;
+	@Column(name = "loan_id")
 	private int loanId;
-	 @Column(name = "account_id")
+	@Column(name = "account_id")
 	private String accountId;
-	 @Column(name = "disbursed_amount")
+	@Column(name = "disbursed_amount")
 	private double disbursedAmount;
-	 @Column(name = "due_amount")
+	@Column(name = "due_amount")
 	private double dueAmount;
-	 @Column(name = "emi_to_be_paid")
+	@Column(name = "emi_to_be_paid")
 	private double numberOfEmiToBePaid;
-	 @Column(name = "loan_type")
+	@Column(name = "loan_type")
 	private String loanType;
-	
-	
+
+	public LoanDisbursal() {
+
+	}
+
 	public int getLoanDisbursalId() {
 		return loanDisbursalId;
 	}
+
 	public void setLoanDisbursalId(int loanDisbursalId) {
 		this.loanDisbursalId = loanDisbursalId;
 	}
+
 	public int getLoanId() {
 		return loanId;
 	}
+
 	public void setLoanId(int loanId) {
 		this.loanId = loanId;
 	}
+
 	public String getAccountId() {
 		return accountId;
 	}
+
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
 	}
+
 	public double getDisbursedAmount() {
 		return disbursedAmount;
 	}
+
 	public void setDisbursedAmount(double disbursedAmount) {
 		this.disbursedAmount = disbursedAmount;
 	}
+
 	public double getDueAmount() {
 		return dueAmount;
 	}
+
 	public void setDueAmount(double dueAmount) {
 		this.dueAmount = dueAmount;
 	}
+
 	public double getNumberOfEmiToBePaid() {
 		return numberOfEmiToBePaid;
 	}
+
 	public void setNumberOfEmiToBePaid(double numberOfEmiToBePaid) {
 		this.numberOfEmiToBePaid = numberOfEmiToBePaid;
 	}
+
 	public String getLoanType() {
 		return loanType;
 	}
+
 	public void setLoanType(String loanType) {
 		this.loanType = loanType;
 	}
-	
-	public LoanDisbursal(int loanDisbursalId, int loanId, String accountId, double disbursedAmount,
-			double dueAmount, double numberOfEmiToBePaid, String loanType) {
-		super();
-		this.loanDisbursalId = loanDisbursalId;
-		this.loanId = loanId;
-		this.accountId = accountId;
-		this.disbursedAmount = disbursedAmount;
-		this.dueAmount = dueAmount;
-		this.numberOfEmiToBePaid = numberOfEmiToBePaid;
-		this.loanType = loanType;
-	}
-	
-	public LoanDisbursal() {
-		
-	}
-	
 
 }

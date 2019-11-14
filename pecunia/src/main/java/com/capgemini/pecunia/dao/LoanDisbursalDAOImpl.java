@@ -10,13 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.capgemini.pecunia.Application;
-import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoanDisbursalException;
 import com.capgemini.pecunia.exception.PecuniaException;
-import com.capgemini.pecunia.model.Account;
-import com.capgemini.pecunia.model.Customer;
 import com.capgemini.pecunia.model.Loan;
 import com.capgemini.pecunia.model.LoanDisbursal;
 import com.capgemini.pecunia.repository.AccountRepository;
@@ -26,7 +22,7 @@ import com.capgemini.pecunia.util.Constants;
 
 @Component
 public class LoanDisbursalDAOImpl implements LoanDisbursalDAO {
-	private static final Logger logger=LoggerFactory.getLogger(LoanDisbursalDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(LoanDisbursalDAO.class);
 	@Autowired
 	AccountRepository accountRepository;
 	@Autowired
@@ -103,16 +99,16 @@ public class LoanDisbursalDAOImpl implements LoanDisbursalDAO {
 	}
 
 	@Override
-	public void updateLoanAccount( double dueAmount, double tenure, String accountId, int loanDisbursalId) throws IOException, PecuniaException, LoanDisbursalException {
+	public void updateLoanAccount(double dueAmount, double tenure, String accountId, int loanDisbursalId)
+			throws IOException, PecuniaException, LoanDisbursalException {
 		Optional<LoanDisbursal> loanDisbursal = loanDisbursalRepository.findById(loanDisbursalId);
-		if(loanDisbursal.isPresent()) {
+		if (loanDisbursal.isPresent()) {
 			LoanDisbursal loan = loanDisbursal.get();
 			loan.setDueAmount(dueAmount);
 			loan.setNumberOfEmiToBePaid(tenure);
 			loanDisbursalRepository.save(loan);
-			
-		}
-		else {
+
+		} else {
 			logger.error(ErrorConstants.INVALID_ACCOUNT_EXCEPTION);
 			throw new LoanDisbursalException(ErrorConstants.INVALID_ACCOUNT_EXCEPTION);
 		}
@@ -164,7 +160,7 @@ public class LoanDisbursalDAOImpl implements LoanDisbursalDAO {
 
 			accountId = loanDisbursalRepository.uniqueAccIds();
 		} catch (Exception e) {
-            logger.error(ErrorConstants.NO_UNIQUE_IDS);
+			logger.error(ErrorConstants.NO_UNIQUE_IDS);
 			throw new LoanDisbursalException(ErrorConstants.NO_UNIQUE_IDS);
 		}
 		logger.info(Constants.UNIQUE_IDS);

@@ -1,6 +1,7 @@
 package com.capgemini.pecunia.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.capgemini.pecunia.exception.AccountException;
 import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
 import com.capgemini.pecunia.model.Login;
