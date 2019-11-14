@@ -11,7 +11,7 @@ import com.capgemini.pecunia.model.Transaction;
 @Repository
 public interface TransactionDAO {
 	public Account getAccountById(String id) throws PecuniaException, TransactionException;
-	
+
 	public double getBalance(Account account) throws PecuniaException, TransactionException;
 
 	public boolean updateBalance(Account account) throws PecuniaException, TransactionException;
