@@ -24,14 +24,13 @@ public interface LoanDisbursalService {
 	public String updateLoanAccount(ArrayList<LoanDisbursal> updateLoanApprovals, int numberOfMonths)
 			throws PecuniaException, LoanDisbursalException;
 
-	public String updateLoanStatus(ArrayList<Loan> rejectedLoanList, ArrayList<Loan> approvedLoanList) throws PecuniaException, LoanDisbursalException;
+	public String updateLoanStatus(ArrayList<Loan> rejectedLoanList, ArrayList<Loan> approvedLoanList)
+			throws PecuniaException, LoanDisbursalException;
 
-	public ArrayList<String> updateExistingBalance(ArrayList<Loan> approvedLoanList, ArrayList<LoanDisbursal> approvedLoanLists)
+	public ArrayList<String> updateExistingBalance(ArrayList<Loan> approvedLoanList,
+			ArrayList<LoanDisbursal> approvedLoanLists)
 			throws PecuniaException, TransactionException, LoanDisbursalException, IOException;
-	
-	
-	public ArrayList<Loan> approveLoanWithoutStatus() throws IOException, PecuniaException, LoanDisbursalException;
-	
 
+	public ArrayList<Loan> approveLoanWithoutStatus() throws IOException, PecuniaException, LoanDisbursalException;
 
 }

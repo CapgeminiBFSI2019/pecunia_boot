@@ -2,15 +2,20 @@ package com.capgemini.pecunia.service;
 
 import java.security.NoSuchAlgorithmException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.capgemini.pecunia.dao.LoginDAO;
-import com.capgemini.pecunia.model.Login;
-import com.capgemini.pecunia.repository.LoginRepository;
 import com.capgemini.pecunia.exception.ErrorConstants;
 import com.capgemini.pecunia.exception.LoginException;
 import com.capgemini.pecunia.exception.PecuniaException;
+import com.capgemini.pecunia.model.Login;
+import com.capgemini.pecunia.repository.LoginRepository;
+import com.capgemini.pecunia.util.Constants;
 import com.capgemini.pecunia.util.Utility;
+
 @Component
 public class LoginServiceImpl implements LoginService {
 
@@ -18,11 +23,9 @@ public class LoginServiceImpl implements LoginService {
 	LoginRepository loginRepository;
 	@Autowired
 	LoginDAO loginDAO;
-	
-//	public LoginServiceImpl() {
-//
-//	}
 
+	private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+	
 	/*******************************************************************************************************
 	 * - Function Name : validateEmail(Login login) - Input Parameters : Login login
 	 * Return Type : boolean - Throws : LoginException - Author : Kumar Saurabh -
@@ -35,7 +38,6 @@ public class LoginServiceImpl implements LoginService {
 	public boolean validateEmail(Login login) throws PecuniaException, LoginException {
 		boolean isValidated = false;
 
-		//com.capgemini.pecunia.hibernate.dao.LoginDAO loginDAO = new com.capgemini.pecunia.hibernate.dao.LoginDAOImpl();
 		String password = null;
 		String secretKey = loginDAO.validateEmail(login);
 		if (secretKey == null) {
@@ -45,31 +47,24 @@ public class LoginServiceImpl implements LoginService {
 			try {
 				arr = Utility.getSHA(login.getPassword() + secretKey);
 			} catch (NoSuchAlgorithmException e) {
-//				logger.error(e.getMessage());
+				logger.error(e.getMessage());
 				throw new LoginException(ErrorConstants.LOGIN_ERROR);
 			}
 			String hashPassword = Utility.toHexString(arr);
-//			Login loginNew = new Login();
-		
 			try {
 				password = loginDAO.fetchPassword(login);
 				if (password.equals(hashPassword)) {
 					isValidated = true;
-//					logger.info(LoggerMessage.LOGIN_SUCCESSFUL);
-				}
-				else {
+					logger.info(Constants.LOGIN_SUCCESSFUL);
+				} else {
 					throw new LoginException(ErrorConstants.LOGIN_ERROR);
 				}
 			} catch (LoginException e) {
-//				logger.error(e.getMessage());
+				logger.error(e.getMessage());
 				throw new LoginException(ErrorConstants.LOGIN_ERROR);
 			}
 		}
 		return isValidated;
 	}
 
-//	@Override
-//	public boolean validateEmail(com.capgemini.pecunia.model.Login log) throws PecuniaException, LoginException {
-//		// TODO Auto-generated method stub
-//		return false;
-	}
+}

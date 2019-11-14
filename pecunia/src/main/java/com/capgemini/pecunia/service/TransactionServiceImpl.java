@@ -21,7 +21,7 @@ import com.capgemini.pecunia.util.Constants;
 
 @Component
 public class TransactionServiceImpl implements TransactionService {
-	private static final Logger logger = LoggerFactory.getLogger(TransactionService.class);
+	private static final Logger logger = LoggerFactory.getLogger(TransactionServiceImpl.class);
 
 	@Autowired
 	TransactionDAO transactionDAO;
